@@ -1,0 +1,496 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{ydnt/global//global/global}
+  \entry{Lagree2022}{online}{}
+    \name{author}{1}{}{%
+      {{hash=LPY}{%
+         family={Lagrée},
+         familyi={L\bibinitperiod},
+         given={P.-Y.},
+         giveni={P\bibinithyphendelim Y\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LPY1}
+    \strng{fullhash}{LPY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2022}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \field{title}{Résolution numérique des équations de Saint-Venant,mise en
+  oeuvre en volumes finis par un solveur de Riemann bien balancé}
+    \verb{url}
+    \verb http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
+    \endverb
+    \field{day}{24}
+    \field{month}{01}
+    \field{year}{2022}
+  \endentry
+
+  \entry{castro2019}{book}{}
+    \name{author}{2}{}{%
+      {{hash=COO}{%
+         family={Castro-Orgaz},
+         familyi={C\bibinithyphendelim O\bibinitperiod},
+         given={O.},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=HW}{%
+         family={Hager},
+         familyi={H\bibinitperiod},
+         given={W.H.},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer International Publishing}%
+    }
+    \strng{namehash}{COOHW1}
+    \strng{fullhash}{COOHW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2019}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \verb{doi}
+    \verb 10.1007/978-3-030-13073-2
+    \endverb
+    \field{isbn}{9783030130732}
+    \field{title}{Shallow Water Hydraulics}
+    \verb{url}
+    \verb https://link.springer.com/book/10.1007/978-3-030-13073-2
+    \endverb
+    \field{year}{2019}
+  \endentry
+
+  \entry{hodges2019}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HBR}{%
+         family={Hodges},
+         familyi={H\bibinitperiod},
+         given={B.\bibnamedelima R.},
+         giveni={B\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HBR1}
+    \strng{fullhash}{HBR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2019}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \verb{doi}
+    \verb 10.5194/hess-23-1281-2019
+    \endverb
+    \field{number}{3}
+    \field{pages}{1281\bibrangedash 1304}
+    \field{title}{Conservative finite-volume forms of the Saint-Venant
+  equations for hydrology and urban drainage}
+    \verb{url}
+    \verb https://hess.copernicus.org/articles/23/1281/2019/
+    \endverb
+    \field{volume}{23}
+    \field{journaltitle}{Hydrology and Earth System Sciences}
+    \field{year}{2019}
+  \endentry
+
+  \entry{toro2019}{article}{}
+    \name{author}{1}{}{%
+      {{hash=TEF}{%
+         family={Toro},
+         familyi={T\bibinitperiod},
+         given={E.\bibnamedelima F.},
+         giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TEF1}
+    \strng{fullhash}{TEF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2019}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \field{abstract}{%
+    The HLLC (Harten--Lax--van Leer contact) approximate Riemann solver for
+  computing solutions to hyperbolic systems by means of finite volume and
+  discontinuous Galerkin methods is reviewed. HLLC was designed, as early as
+  1992, as an improvement to the classical HLL (Harten--Lax--van Leer) Riemann
+  solver of Harten, Lax, and van Leer to solve systems with three or more
+  characteristic fields, in order to avoid the excessive numerical dissipation
+  of HLL for intermediate characteristic fields. Such numerical dissipation is
+  particularly evident for slowly moving intermediate linear waves and for long
+  evolution times. High-order accurate numerical methods can, to some extent,
+  compensate for this shortcoming of HLL, but it is a costly remedy and for
+  stationary or nearly stationary intermediate waves such compensation is very
+  difficult to achieve in practice. It is therefore best to resolve the problem
+  radically, at the first-order level, by choosing an appropriate numerical
+  flux. The present paper is a review of the HLLC scheme, starting from some
+  historical notes, going on to a description of the algorithm as applied to
+  some typical hyperbolic systems, and ending with an overview of some of the
+  most significant developments and applications in the last 25 years.%
+    }
+    \verb{doi}
+    \verb 10.1007/s00193-019-00912-4
+    \endverb
+    \field{issn}{1432-2153}
+    \field{number}{8}
+    \field{pages}{1065\bibrangedash 1082}
+    \field{title}{The HLLC Riemann solver}
+    \verb{url}
+    \verb https://doi.org/10.1007/s00193-019-00912-4
+    \endverb
+    \field{volume}{29}
+    \field{journaltitle}{Shock Waves}
+    \field{year}{2019}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{huang2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=HY}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Yuxin},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=ZN}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Ningchuan},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=PY}{%
+         family={Pei},
+         familyi={P\bibinitperiod},
+         given={Yuguo},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Taylor & Francis}%
+    }
+    \strng{namehash}{HY+1}
+    \strng{fullhash}{HYZNPY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \verb{doi}
+    \verb 10.1080/19942060.2013.11015452
+    \endverb
+    \verb{eprint}
+    \verb https://doi.org/10.1080/19942060.2013.11015452
+    \endverb
+    \field{number}{1}
+    \field{pages}{40\bibrangedash 54}
+    \field{title}{Well-Balanced Finite Volume Scheme for Shallow Water Flooding
+  and Drying Over Arbitrary Topography}
+    \verb{url}
+    \verb https://doi.org/10.1080/19942060.2013.11015452
+    \endverb
+    \field{volume}{7}
+    \field{journaltitle}{Engineering Applications of Computational Fluid
+  Mechanics}
+    \field{year}{2013}
+  \endentry
+
+  \entry{toro2013}{book}{}
+    \name{author}{1}{}{%
+      {{hash=TEF}{%
+         family={Toro},
+         familyi={T\bibinitperiod},
+         given={Eleuterio\bibnamedelima F},
+         giveni={E\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Science \& Business Media}%
+    }
+    \strng{namehash}{TEF2}
+    \strng{fullhash}{TEF2}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2013}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \verb{doi}
+    \verb 10.1007/b79761
+    \endverb
+    \field{title}{Riemann solvers and numerical methods for fluid dynamics: a
+  practical introduction}
+    \field{year}{2013}
+  \endentry
+
+  \entry{guinot2012}{book}{}
+    \name{author}{1}{}{%
+      {{hash=GV}{%
+         family={Guinot},
+         familyi={G\bibinitperiod},
+         given={Vincent},
+         giveni={V\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {John Wiley \& Sons}%
+    }
+    \strng{namehash}{GV1}
+    \strng{fullhash}{GV1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2012}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \field{title}{Wave propagation in fluids: models and numerical techniques}
+    \field{year}{2012}
+  \endentry
+
+  \entry{kerger2011}{article}{}
+    \name{author}{5}{}{%
+      {{hash=KF}{%
+         family={Kerger},
+         familyi={K\bibinitperiod},
+         given={F.},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=AP}{%
+         family={Archambeau},
+         familyi={A\bibinitperiod},
+         given={P.},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=ES}{%
+         family={Erpicum},
+         familyi={E\bibinitperiod},
+         given={S.},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=DB}{%
+         family={Dewals},
+         familyi={D\bibinitperiod},
+         given={B.J.},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Pirotton},
+         familyi={P\bibinitperiod},
+         given={M.},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \keyw{Hydraulics, Finite volume method, Negative Preissmann slot,
+  Saint-Venant equations, Transient flow, Water hammer}
+    \strng{namehash}{KF+1}
+    \strng{fullhash}{KFAPESDBPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2011}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \field{abstract}{%
+    The current research aims at deriving a one-dimensional numerical model for
+  describing highly transient mixed flows. In particular, this paper focuses on
+  the development and assessment of a unified numerical scheme adapted to
+  describe free-surface flow, pressurized flow and mixed flow (characterized by
+  the simultaneous occurrence of free-surface and pressurized flows). The
+  methodology includes three steps. First, the authors derived a unified
+  mathematical model based on the Preissmann slot model. Second, a first-order
+  explicit finite volume Godunov-type scheme is used to solve the set of
+  equations. Third, the numerical model is assessed by comparison with
+  analytical, experimental and numerical results. The key results of the paper
+  are the development of an original negative Preissmann slot for simulating
+  sub-atmospheric pressurized flow and the derivation of an exact Riemann
+  solver for the Saint-Venant equations coupled with the Preissmann slot.%
+    }
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.cam.2010.09.026
+    \endverb
+    \field{issn}{0377-0427}
+    \field{number}{8}
+    \field{pages}{2030\bibrangedash 2040}
+    \field{title}{An exact Riemann solver and a Godunov scheme for simulating
+  highly transient mixed flows}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S0377042710005558
+    \endverb
+    \field{volume}{235}
+    \field{journaltitle}{Journal of Computational and Applied Mathematics}
+    \field{year}{2011}
+  \endentry
+
+  \entry{leveque_2002}{book}{}
+    \name{author}{1}{}{%
+      {{hash=LRJ}{%
+         family={LeVeque},
+         familyi={L\bibinitperiod},
+         given={Randall\bibnamedelima J.},
+         giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Cambridge University Press}%
+    }
+    \strng{namehash}{LRJ1}
+    \strng{fullhash}{LRJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2002}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \verb{doi}
+    \verb 10.1017/CBO9780511791253
+    \endverb
+    \field{series}{Cambridge Texts in Applied Mathematics}
+    \field{title}{Finite Volume Methods for Hyperbolic Problems}
+    \field{year}{2002}
+  \endentry
+
+  \entry{toro2001}{book}{}
+    \name{author}{1}{}{%
+      {{hash=TE}{%
+         family={Toro},
+         familyi={T\bibinitperiod},
+         given={Eleuterio},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Wiley}%
+      {Sons}%
+    }
+    \strng{namehash}{TE1}
+    \strng{fullhash}{TE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{2001}
+    \field{labeldatesource}{}
+    \field{sortinit}{7}
+    \field{sortinithash}{7}
+    \field{isbn}{978-0-471-98766-6}
+    \field{title}{Shock Capturing Methods for Free Surface Shallow Flows}
+    \field{year}{2001}
+  \endentry
+
+  \entry{harten1983}{article}{}
+    \name{author}{3}{}{%
+      {{hash=HA}{%
+         family={Harten},
+         familyi={H\bibinitperiod},
+         given={Amiram},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LPD}{%
+         family={Lax},
+         familyi={L\bibinitperiod},
+         given={Peter\bibnamedelima D.},
+         giveni={P\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=LBv}{%
+         family={Leer},
+         familyi={L\bibinitperiod},
+         given={Bram\bibnamedelima van},
+         giveni={B\bibinitperiod\bibinitdelim v\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HA+1}
+    \strng{fullhash}{HALPDLBv1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1983}
+    \field{labeldatesource}{}
+    \field{sortinit}{8}
+    \field{sortinithash}{8}
+    \field{abstract}{%
+    This paper reviews some of the recent developments in upstream difference
+  schemes through a unified representation, in order to enable comparison
+  between the various schemes. Special attention is given to the Godunov-type
+  schemes that result from using an approximate solution of the Riemann
+  problem. For schemes based on flux splitting, the approximate Riemann
+  solution can be interpreted as a solution of the collisionless Boltzmann
+  equation.%
+    }
+    \verb{doi}
+    \verb 10.1137/1025002
+    \endverb
+    \verb{eprint}
+    \verb https://doi.org/10.1137/1025002
+    \endverb
+    \field{number}{1}
+    \field{pages}{35\bibrangedash 61}
+    \field{title}{On Upstream Differencing and Godunov-Type Schemes for
+  Hyperbolic Conservation Laws}
+    \verb{url}
+    \verb https://doi.org/10.1137/1025002
+    \endverb
+    \field{volume}{25}
+    \field{journaltitle}{SIAM Review}
+    \field{year}{1983}
+  \endentry
+
+  \entry{godunov1959}{article}{}
+    \name{author}{2}{}{%
+      {{hash=GSK}{%
+         family={Godunov},
+         familyi={G\bibinitperiod},
+         given={Sergei\bibnamedelima K.},
+         giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=BI}{%
+         family={Bohachevsky},
+         familyi={B\bibinitperiod},
+         given={I.},
+         giveni={I\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Steklov Mathematical Institute of Russian Academy of Sciences}}%
+    }
+    \strng{namehash}{GSKBI1}
+    \strng{fullhash}{GSKBI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{labelyear}{1959}
+    \field{labeldatesource}{}
+    \field{sortinit}{8}
+    \field{sortinithash}{8}
+    \field{number}{3}
+    \field{pages}{271\bibrangedash 306}
+    \field{title}{{Finite difference method for numerical computation of
+  discontinuous solutions of the equations of fluid dynamics}}
+    \verb{url}
+    \verb https://hal.archives-ouvertes.fr/hal-01620642
+    \endverb
+    \field{volume}{47(89)}
+    \verb{file}
+    \verb https://hal.archives-ouvertes.fr/hal-01620642/file/SG1959.pdf
+    \endverb
+    \field{journaltitle}{{Matemati{\v c}eskij sbornik}}
+    \field{year}{1959}
+  \endentry
+\enddatalist
+\endinput
