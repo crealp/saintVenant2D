@@ -98,7 +98,7 @@ end
     hi = 1.5
     h0 = hi.-z
     h  = h0.*ones(Float64,nx,ny)
-    h  = h0.+exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/4)./(lx./8))'.^(2))
+    h  = h0.+exp.(.-((xc.-lx/2)./(lx./16)).^(2) .-((yc.-lx/4)./(lx./16))'.^(2))
     
     return(h,z,xc,yc,Δx,Δy)
 end
