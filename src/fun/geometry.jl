@@ -66,7 +66,7 @@ end
     return(h,z,xc,yc,Δx,Δy)
 end
 
-@views function geometry2(lx,ly,nx,ny)
+@views function gaussian_floor(lx,ly,nx,ny)
     # number of points
     Δx,Δy  = lx/nx,ly/ny 
     x,y    = 0.0:Δx:lx,0.0:Δy:ly
@@ -95,10 +95,10 @@ end
     end
     z = z.+δz
     # set initial fluid height
-    hi = 4.0
+    hi = 1.5
     h0 = hi.-z
     h  = h0.*ones(Float64,nx,ny)
-    h  = h0.+exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
+    h  = h0.+exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/4)./(lx./8))'.^(2))
     
     return(h,z,xc,yc,Δx,Δy)
 end
