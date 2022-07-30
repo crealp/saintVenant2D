@@ -75,11 +75,11 @@ include("get.jl")
         if t > ctr*tC
             ctr+=1
                 fig=gr(size=(2*250,2*125),markersize=2.5)       
-                    fig=wave_plot(xc,yc,h,z,η0,0.1*ηmax0,nx,ny,t)
+                    #fig=wave_plot(xc,yc,h,z,η0,0.1*ηmax0,nx,ny,t)
                     #fig=free_surface_plot(xc,yc,h,z,η0,0.25*(maximum(h.+z)-η0),nx,ny,t)
                     #fig=discharge_plot(xc,yc,h,Qx,Qy,z,2.5,nx,ny,t)
                     #fig=profile_plot(xc,yc,h,z,zmin,10.0,nx,ny,t)
-                    #fig=h_plot(xc,yc,h,0.5,nx,ny,t,flow_type)
+                    fig=h_plot(xc,yc,h,0.5,nx,ny,t,flow_type)
                     if make_gif==true
                         frame(anim,fig)
                     end

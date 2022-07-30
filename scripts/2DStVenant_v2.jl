@@ -6,7 +6,7 @@ include("../src/fun/solve/svSolver.jl")
 
 @views function main()
     Dsim   = param("HLLC",false,"coulomb",false)
-    #Dsim   = param("HLLC",false,"newtonian",false)
+    #Dsim   = param("HLLC",false,"newtonian",true)
     # physical constant
     lx     = 20.0
     ly     = 20.0
