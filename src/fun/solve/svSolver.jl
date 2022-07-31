@@ -68,7 +68,7 @@ include("get.jl")
         # advection step solution
         h,Qx,Qy = advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,solv_type)
         # source step solution
-        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
+        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
         # update current time
         t  += Δt
         it += 1

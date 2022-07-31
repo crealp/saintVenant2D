@@ -18,11 +18,10 @@
         end
     end
 end
-@views function τ_coulomb(h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+@views function τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     ρs = 2.7e3
     ϕb = 15.0*pi/180
     μ  = tan(ϕb)
-    S  = zeros(Float64,nx,ny,3)
     for j ∈ 1:ny
         for i ∈ 1:nx
             if h[i,j]>0.0
@@ -98,11 +97,10 @@ end
         end
     end
 end
-@views function souSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
-    
+@views function souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
     S  = zeros(Float64,nx,ny,3)
     if flow_type=="coulomb"
-        S = τ_coulomb(h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+        τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     elseif flow_type=="newtonian"
         S = τ_newtonian(h,Qx,Qy,g,nx,ny)
     end
