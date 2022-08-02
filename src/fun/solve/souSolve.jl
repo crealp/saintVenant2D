@@ -8,11 +8,11 @@
             end
         end
     end
-    if flow_type=="newtonian"||flow_type=="plastic"
+    if flow_type=="newtonian"
         for dim in 1:3
             for j in 1:ny
                 for i in 1:nx
-                U[i,j,dim]=U[i,j,dim]/(1.0-Δt*S[i,j,dim])
+                U[i,j,dim]=U[i,j,dim]/(1.0+Δt*S[i,j,dim])
                 end
             end
         end
@@ -59,7 +59,7 @@ end
     return S
 end
 @views function τ_newtonian(h,Qx,Qy,g,nx,ny)
-    n  = 0.25
+    n  = 0.025
     ρw = 1.0e3
     S  = zeros(Float64,nx,ny,3)
     for j ∈ 1:ny
@@ -70,13 +70,37 @@ end
                 w  = sqrt(u^2+v^2)
                 if w>0.0
                         Cf = n^2*(h[i,j])^(-4/3)
-                        τ  = 0.0*g*h[i,j]*Cf*w
+                        τ  = g*Cf*w
                 else 
                         τ  = 0.0
                 end
                 S[i,j,1] = 0.0
-                S[i,j,2] = -τ/ρw
-                S[i,j,3] = -τ/ρw
+                S[i,j,2] = τ
+                S[i,j,3] = τ
+            end
+        end
+    end
+    return S
+end
+@views function τ_plastic(h,Qx,Qy,g,nx,ny)
+    n  = 0.025
+    ρw = 1.0e3
+    S  = zeros(Float64,nx,ny,3)
+    for j ∈ 1:ny
+        for i ∈ 1:nx
+            if h[i,j]>0.0
+                u  = Qx[i,j]/(h[i,j])
+                v  = Qy[i,j]/(h[i,j])
+                w  = sqrt(u^2+v^2)
+                if w>0.0
+                        Cf = n^2*(h[i,j])^(-4/3)
+                        τ  = g*Cf*w
+                else 
+                        τ  = 0.0
+                end
+                S[i,j,1] = 0.0
+                S[i,j,2] = τ
+                S[i,j,3] = τ
             end
         end
     end
@@ -106,7 +130,8 @@ end
     end
 
     if pcpt_onoff==true
-        precip!(S,1.0e-3/3600.0,t,nx,ny)
+        #precip!(S,1.0e-3/3600.0,t,nx,ny)
+        precip!(S,1.0e-2,t,nx,ny)
     end
     # assembly of conservative variables vector and flux function vector
     getU!(U,h,Qx,Qy,nx,ny)
