@@ -154,7 +154,7 @@ end
     lx,ly = size(h)
     η = (h.+z)
     id = ceil(Int64,lx/2)
-    plot(yc, η[id,:],
+    plot(xc, η[:,id],
         aspect_ratio=true,
         show=false,
     )

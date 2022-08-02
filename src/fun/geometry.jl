@@ -263,3 +263,53 @@ end
     h  = hi.*ones(Float64,nx,ny)
     return(h,z,xc,yc,Δx,Δy)
 end
+@views function incline(lx,ly,nx,ny)
+    # number of points
+    Δx,Δy  = lx/nx,ly/ny 
+    x,y    = 0.0:Δx:lx,0.0:Δy:ly
+    # calculate midpoint values of x in each control vlume
+    xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
+    # set initial bed topography
+    zmax   = 5.0
+    a      = -0.5
+    z      = exp.(((xc.-lx/2)./(lx./2)).^2 .+((yc.-ly/2)./(ly./2))'.^2)
+    z      = (a.*xc.+zmax).*ones(Float64,ny)'
+    for j ∈ 1:ny
+        for i ∈ 1:nx
+            if z[i,j]<=-1e-10
+                z[i,j]=-1e-10
+            end
+        end
+    end
+    xc0    = lx/2.5
+    yc0    = 0.5*ly
+    R      = lx/20
+    hbump  = 0.91
+    H      = hbump/exp(-1.0/R^2)
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            r = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if r<=R
+                z[i,j]+=H*exp(-1.0/(R^2-((xc[i]-xc0)^2+(yc[j]-yc0)^2)  ))
+
+            end
+        end
+    end
+
+
+    # set initial fluid height
+    hi     = 1.0/2.0
+    h      = zeros(Float64,nx,ny)
+    xc0    = lx/5
+    yc0    = 0.5*ly
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            d = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if d<=lx/10
+                h[i,j]=max((a.*xc0.+zmax+hi)-z[i,j],0.0)
+
+            end
+        end
+    end
+    return(h,z,xc,yc,Δx,Δy)
+end
