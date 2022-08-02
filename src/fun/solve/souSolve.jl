@@ -8,11 +8,16 @@
             end
         end
     end
-    if flow_type=="newtonian"
+    if flow_type=="newtonian" || flow_type=="plastic"
         for dim in 1:3
             for j in 1:ny
                 for i in 1:nx
-                U[i,j,dim]=U[i,j,dim]/(1.0+Δt*S[i,j,dim])
+                if dim == 1
+                    U[i,j,1]+=Δt*S[i,j,1]
+                else
+                    U[i,j,dim]=U[i,j,dim]/(1.0+Δt*S[i,j,dim])
+                end
+
                 end
             end
         end
@@ -59,7 +64,7 @@ end
     return S
 end
 @views function τ_newtonian(h,Qx,Qy,g,nx,ny)
-    n  = 0.025
+    n  = 0.00025
     ρw = 1.0e3
     S  = zeros(Float64,nx,ny,3)
     for j ∈ 1:ny
@@ -83,8 +88,11 @@ end
     return S
 end
 @views function τ_plastic(h,Qx,Qy,g,nx,ny)
-    n  = 0.025
-    ρw = 1.0e3
+    ρs = 2.7e3
+    ϕb = 15.0*pi/180
+    μ  = tan(ϕb)
+    η  = 1.0e3
+    m  = 3.0/2.0
     S  = zeros(Float64,nx,ny,3)
     for j ∈ 1:ny
         for i ∈ 1:nx
@@ -92,15 +100,19 @@ end
                 u  = Qx[i,j]/(h[i,j])
                 v  = Qy[i,j]/(h[i,j])
                 w  = sqrt(u^2+v^2)
-                if w>0.0
-                        Cf = n^2*(h[i,j])^(-4/3)
-                        τ  = g*Cf*w
-                else 
-                        τ  = 0.0
-                end
+                u  = Qx[i,j]/(h[i,j])
+                v  = Qy[i,j]/(h[i,j])
+                w  = sqrt(u^2+v^2)
+
+                τf = ρs*g*h[i,j]*tan(ϕb)
+                
+
+                τη = ((2.0*m+1.0)/m)^m*η*(w/h[i,j])^m
+
+
                 S[i,j,1] = 0.0
-                S[i,j,2] = τ
-                S[i,j,3] = τ
+                S[i,j,2] = (τf+τη)/ρs
+                S[i,j,3] = (τf+τη)/ρs
             end
         end
     end
@@ -127,11 +139,13 @@ end
         τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     elseif flow_type=="newtonian"
         S = τ_newtonian(h,Qx,Qy,g,nx,ny)
+    elseif flow_type=="plastic"
+        S = τ_plastic(h,Qx,Qy,g,nx,ny)
     end
 
     if pcpt_onoff==true
         #precip!(S,1.0e-3/3600.0,t,nx,ny)
-        precip!(S,1.0e-2,t,nx,ny)
+        precip!(S,1.0e-3,t,nx,ny)
     end
     # assembly of conservative variables vector and flux function vector
     getU!(U,h,Qx,Qy,nx,ny)
