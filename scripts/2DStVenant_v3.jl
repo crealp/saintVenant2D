@@ -7,7 +7,7 @@ include("../src/fun/solve/svSolver.jl")
 @views function main()
     Dsim   = param("Rus",
                     false,
-                    "newtonian2",
+                    "newtonian",
                     true
                 )
     # physical constant
