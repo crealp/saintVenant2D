@@ -26,7 +26,7 @@ end
     mask = ones(Float64,nx,ny)
         for j in 1:ny
             for i in 1:nx
-                if h[i,j]<=1e-3
+                if h[i,j]<=1e-2
                     mask[i,j] = NaN
                 end
             end

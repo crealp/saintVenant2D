@@ -89,7 +89,7 @@ include("get.jl")
     ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
     println("[=> generating final plots, exporting & exiting...")
     if make_gif==true
-        gif(anim,path*solv_type*"_wave.gif")
+        gif(anim,path*solv_type*".gif")
     end
     savefig(path*solv_type*"_plot.png")
 

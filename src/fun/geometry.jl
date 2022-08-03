@@ -73,26 +73,34 @@ end
     # calculate midpoint values of x in each control vlume
     xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
     # set initial bed topography
-    z      = exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
-    δz     = 1.0.*1.75.*(2.0.*rand(nx,ny).-1.0)
-    for r ∈ 1:10
+    z      = 0.0.*exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
+    Δz     = 0.5
+    δz     = 1.0.*Δz.*(2.0.*rand(nx,ny).-1.0)
+    for r ∈ 1:2
         for i ∈ 1:nx
             for j ∈ 1:ny
-                if i>1 && i<nx && j>1 && j<ny
-                    δz[i,j] = (δz[i-1,j-1]+δz[i,j-1]+δz[i+1,j-1]+δz[i-1,j]+δz[i,j]+δz[i+1,j]+δz[i-1,j+1]+δz[i,j+1]+δz[i+1,j+1])/9.0
-                elseif i==1
-                    δz[i,j] = δz[i+1,j  ]
-                elseif i==nx
-                    δz[i,j] = δz[i-1,j  ]
-                elseif j==1
-                    δz[i,j] = δz[i  ,j+1]
-                elseif j==ny
-                    δz[i,j] = δz[i  ,j-1]    
-                end
+                δz[i,j] = oneDkern(δz,xc,yc,i,j,nx,ny,2.25*Δx)
+            end
+        end
+    end
+    δz = (Δz/maximum(abs.(δz))).*δz
+
+
+    xc0    = 0.5*lx
+    yc0    = 0.5*ly
+    R      = lx/20
+    hbump  = 2.5
+    H      = hbump/exp(-1.0/R^2)
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            r = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if r<=R
+                z[i,j]+=H*exp(-1.0/(R^2-((xc[i]-xc0)^2+(yc[j]-yc0)^2)  ))
 
             end
         end
     end
+
     z = z.+δz
     # set initial fluid height
     hi = 1.5
