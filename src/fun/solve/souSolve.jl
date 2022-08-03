@@ -25,7 +25,7 @@
 end
 @views function τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     ρs = 2.7e3
-    ϕb = 15.0*pi/180
+    ϕb = 35.0*pi/180
     μ  = tan(ϕb)
     for j ∈ 1:ny
         for i ∈ 1:nx

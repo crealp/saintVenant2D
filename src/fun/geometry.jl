@@ -278,8 +278,8 @@ end
     # calculate midpoint values of x in each control vlume
     xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
     # set initial bed topography
-    zmax   = 5.0
-    a      = -0.5
+    a      = -1.0
+    zmax   = 0.5*(abs(a)*lx)
     z      = exp.(((xc.-lx/2)./(lx./2)).^2 .+((yc.-ly/2)./(ly./2))'.^2)
     z      = (a.*xc.+zmax).*ones(Float64,ny)'
     for j ∈ 1:ny
@@ -303,8 +303,6 @@ end
             end
         end
     end
-
-
     # set initial fluid height
     hi     = 1.0/2.0
     h      = zeros(Float64,nx,ny)
