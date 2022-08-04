@@ -143,7 +143,5 @@ end
     ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
     param=DataFrame("nx"=>nx,"ny"=>ny,"dx"=>Δx,"dy"=>Δy,"t"=>T,"CFl"=>CFL,"nsave"=>ctr-1)
     CSV.write(path*"parameters.csv",param)
-
-    viz(false)
     println("[=> done! exiting...")
 end
