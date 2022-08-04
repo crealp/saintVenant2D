@@ -167,6 +167,23 @@ julia> include("./scripts/geoflow.jl")
 
 5. The outputs (figs, gif, etc.) are saved in the folder ``` ./src/out/ ```
 
+### Play in ```geoflow.jl```: a quick example
+The user can change initial parameter for the simulation, i.e., generate gif, select numerical flux, the rheological model or if precipitation is enable, such as
+```julia 
+Dsim   = param("HLLC",false,"coulomb",false)
+```
+with the following declaration prototype for the structure ```Dsim``` located at ```./src/fun/misc.jl```, i.e., 
+```julia 
+struct param
+    solv_type::String
+    make_gif::Bool
+    flow_type::String
+    pcpt_onoff::Bool
+end
+Dsim = param(solv_type,make_gif,flow_type,pcpt_onoff)
+```
+The user can select three different flux types, e.g., ```"Rus"```, ```"HLL"``` or ```"HLLC"``` and two different rheological/basal resistance models, e.g., ```"newtonian"``` and ```"coulomb"```. 
+
 <div id='id-section3'/> 
 
 ## **References**
