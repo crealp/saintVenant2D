@@ -182,3 +182,35 @@ end
     )
     return hs
 end
+
+@views function viz(make_gif)
+    p = CSV.read(path*"parameters.csv",DataFrame,header=1; delim=",")
+    p = Array(p)
+    nx= Int64(p[1])
+    ny= Int64(p[2])
+    ns = Int64(p[end])
+    
+    D  = CSV.read(path*"xy.csv",DataFrame,header=1; delim=",")
+    xc = D[:,1]
+    yc = D[:,2]
+
+    if make_gif==true
+        anim = Animation()
+    end
+    prog = Progress(ns,dt=0.1,barglyphs=BarGlyphs('|','█', ['▁' ,'▂' ,'▃' ,'▄' ,'▅' ,'▆', '▇'],' ','|',),barlen=16,showspeed=false)
+    for k in 1:ns
+        D  = Array(CSV.read(path*"tdt_"*string(k)*".csv",DataFrame,header=1; delim=","))
+        t  = D[1]
+        D  = Array(CSV.read(path*"hQxQyt_"*string(k)*".csv",DataFrame,header=1; delim=","))
+        h  = reshape(vec(D[:,1]),nx,ny)
+        fig=gr(size=(2*250,2*125),markersize=2.5)       
+            fig=h_plot(xc,yc,h,0.5,nx,ny,t,"coulomb")
+        if make_gif==true
+            frame(anim,fig)
+        end
+        next!(prog)
+    end
+    if make_gif==true
+        gif(anim,path*"thickness"*".gif")
+    end
+end
