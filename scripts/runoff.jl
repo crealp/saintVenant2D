@@ -5,7 +5,7 @@ include("../src/fun/geometry.jl")
 include("../src/fun/solve/svSolver.jl")
 
 @views function main()
-    Dsim   = param("Rus",
+    Dsim   = param("HLLC",
                     false,
                     "newtonian",
                     true
