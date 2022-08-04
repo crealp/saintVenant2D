@@ -1,5 +1,5 @@
 # Rusanov numerical fluxes
-@views function fluxRus(UL,UR,FL,FR,g,type)
+@views function fluxRus(fRus,UL,UR,FL,FR,g,type)
     hL    = max(0.0,UL[1])
     if hL>0.0
         if type == "F"
@@ -22,17 +22,17 @@
     end
     cL    = sqrt(g*hL)
     cR    = sqrt(g*hR)
-    λ     = maximum(abs.(hcat(uL-sqrt(g*hL),uR+sqrt(g*hR))))
-    fRus  = zeros(Float64,3)
+    λ     = max(abs(uL-sqrt(g*hL)),abs(uR+sqrt(g*hR)))
     for dim in 1:3
         fRus[dim] = (0.5*(FL[dim]+FR[dim])-0.5*λ*(UR[dim]-UL[dim]))
     end
     return fRus 
 end
-@views function Rus!(FLR,UL,UR,FL,FR,g,nx,ny,type)
+@views function Rus!(F,UL,UR,FL,FR,g,nx,ny,type)
+    fRus = zeros(Float64,3)
     for j in 1:ny
         for i in 1:nx+1
-            FLR[i,j,:] = fluxRus(UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type)
+            F[i,j,:] .= fluxRus(fRus,UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type)
         end
     end
 end
