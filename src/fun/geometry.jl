@@ -66,39 +66,47 @@ end
     return(h,z,xc,yc,Δx,Δy)
 end
 
-@views function geometry2(lx,ly,nx,ny)
+@views function gaussian_floor(lx,ly,nx,ny)
     # number of points
     Δx,Δy  = lx/nx,ly/ny 
     x,y    = 0.0:Δx:lx,0.0:Δy:ly
     # calculate midpoint values of x in each control vlume
     xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
     # set initial bed topography
-    z      = exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
-    δz     = 1.0.*1.75.*(2.0.*rand(nx,ny).-1.0)
-    for r ∈ 1:10
+    z      = 0.0.*exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
+    Δz     = 0.5
+    δz     = 1.0.*Δz.*(2.0.*rand(nx,ny).-1.0)
+    for r ∈ 1:2
         for i ∈ 1:nx
             for j ∈ 1:ny
-                if i>1 && i<nx && j>1 && j<ny
-                    δz[i,j] = (δz[i-1,j-1]+δz[i,j-1]+δz[i+1,j-1]+δz[i-1,j]+δz[i,j]+δz[i+1,j]+δz[i-1,j+1]+δz[i,j+1]+δz[i+1,j+1])/9.0
-                elseif i==1
-                    δz[i,j] = δz[i+1,j  ]
-                elseif i==nx
-                    δz[i,j] = δz[i-1,j  ]
-                elseif j==1
-                    δz[i,j] = δz[i  ,j+1]
-                elseif j==ny
-                    δz[i,j] = δz[i  ,j-1]    
-                end
+                δz[i,j] = oneDkern(δz,xc,yc,i,j,nx,ny,2.25*Δx)
+            end
+        end
+    end
+    δz = (Δz/maximum(abs.(δz))).*δz
+
+
+    xc0    = 0.5*lx
+    yc0    = 0.5*ly
+    R      = lx/20
+    hbump  = 2.5
+    H      = hbump/exp(-1.0/R^2)
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            r = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if r<=R
+                z[i,j]+=H*exp(-1.0/(R^2-((xc[i]-xc0)^2+(yc[j]-yc0)^2)  ))
 
             end
         end
     end
+
     z = z.+δz
     # set initial fluid height
-    hi = 4.0
+    hi = 1.5
     h0 = hi.-z
     h  = h0.*ones(Float64,nx,ny)
-    h  = h0.+exp.(.-((xc.-lx/2)./(lx./8)).^(2) .-((yc.-lx/2)./(lx./8))'.^(2))
+    h  = h0.+exp.(.-((xc.-lx/2)./(lx./16)).^(2) .-((yc.-lx/4)./(lx./16))'.^(2))
     
     return(h,z,xc,yc,Δx,Δy)
 end
@@ -261,5 +269,53 @@ end
     # set initial fluid height
     hi = 1.0e-3
     h  = hi.*ones(Float64,nx,ny)
+    return(h,z,xc,yc,Δx,Δy)
+end
+@views function incline(lx,ly,nx,ny)
+    # number of points
+    Δx,Δy  = lx/nx,ly/ny 
+    x,y    = 0.0:Δx:lx,0.0:Δy:ly
+    # calculate midpoint values of x in each control vlume
+    xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
+    # set initial bed topography
+    a      = -1.0
+    zmax   = 0.5*(abs(a)*lx)
+    z      = exp.(((xc.-lx/2)./(lx./2)).^2 .+((yc.-ly/2)./(ly./2))'.^2)
+    z      = (a.*xc.+zmax).*ones(Float64,ny)'
+    for j ∈ 1:ny
+        for i ∈ 1:nx
+            if z[i,j]<=-1e-10
+                z[i,j]=-1e-10
+            end
+        end
+    end
+    xc0    = lx/2.5
+    yc0    = 0.5*ly
+    R      = lx/20
+    hbump  = 0.91
+    H      = hbump/exp(-1.0/R^2)
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            r = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if r<=R
+                z[i,j]+=H*exp(-1.0/(R^2-((xc[i]-xc0)^2+(yc[j]-yc0)^2)  ))
+
+            end
+        end
+    end
+    # set initial fluid height
+    hi     = 1.0/2.0
+    h      = zeros(Float64,nx,ny)
+    xc0    = lx/5
+    yc0    = 0.5*ly
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            d = (xc[i]-xc0)^2+(yc[j]-yc0)^2
+            if d<=lx/10
+                h[i,j]=max((a.*xc0.+zmax+hi)-z[i,j],0.0)
+
+            end
+        end
+    end
     return(h,z,xc,yc,Δx,Δy)
 end

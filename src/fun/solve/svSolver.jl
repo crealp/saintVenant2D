@@ -68,7 +68,7 @@ include("get.jl")
         # advection step solution
         h,Qx,Qy = advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,solv_type)
         # source step solution
-        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
+        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
         # update current time
         t  += Δt
         it += 1
@@ -89,11 +89,59 @@ include("get.jl")
     ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
     println("[=> generating final plots, exporting & exiting...")
     if make_gif==true
-        gif(anim,path*solv_type*"_wave.gif")
+        gif(anim,path*solv_type*".gif")
     end
     savefig(path*solv_type*"_plot.png")
 
     free_surface_plot(xc,yc,h,z,η0,0.3*(maximum(h.+z)-η0),nx,ny,t)
     savefig(path*solv_type*"_freesurface.png")
+    println("[=> done! exiting...")
+end
+@views function svSolverPerf(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+    solv_type  = Dsim.solv_type
+    make_gif   = Dsim.make_gif
+    flow_type  = Dsim.flow_type
+    pcpt_onoff = Dsim.pcpt_onoff
+    println("[=> saving initial geometry & conditions...")
+    savedData=DataFrame("x"=>vec(xc),"y"=>vec(yc))
+    CSV.write(path*"xy.csv",savedData)
+    # set & get vectors
+    U,F,G = getUF(h,Qx,Qy,g,nx,ny)
+    # set time
+    t     = 0.0
+    # plot & time stepping parameters
+    it    = 0
+    ctr   = 0
+    # generate GIF
+    if make_gif==true
+        println("[=> initializing & configuring .gif...")
+        anim = Animation()
+    end
+    # action
+    println("[=> action!")
+    prog  = ProgressUnknown("working hard:", spinner=true,showspeed=true)
+    while t<T
+        # adaptative Δt
+        Δt  = getΔt(h,Qx,Qy,g,Δx,Δy,CFL,nx,ny)
+        # advection step solution
+        h,Qx,Qy = advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,solv_type)
+        # source step solution
+        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
+        # update current time
+        t  += Δt
+        it += 1
+        if t > ctr*tC
+            savedData=DataFrame("h"=>vec(h),"Qx"=>vec(Qx),"Qy"=>vec(Qy))
+            CSV.write(path*"hQxQyt_"*string(ctr)*".csv",savedData)
+            savedData=DataFrame("t"=>t,"Δt"=>Δt,"it"=>it)
+            CSV.write(path*"tdt_"*string(ctr)*".csv",savedData)
+            ctr+=1
 
+        end
+        next!(prog;showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✗) t/T",round(t/T,digits=2))])
+    end
+    ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
+    param=DataFrame("nx"=>nx,"ny"=>ny,"dx"=>Δx,"dy"=>Δy,"t"=>T,"CFl"=>CFL,"nsave"=>ctr-1)
+    CSV.write(path*"parameters.csv",param)
+    println("[=> done! exiting...")
 end
