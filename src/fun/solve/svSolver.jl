@@ -102,9 +102,34 @@ end
     make_gif   = Dsim.make_gif
     flow_type  = Dsim.flow_type
     pcpt_onoff = Dsim.pcpt_onoff
-    println("[=> saving initial geometry & conditions...")
+    println("[=> plotting & saving initial geometry & conditions...")
+    # display initial stuffs
+    η0   = minimum(h.+z)
+    zmin = minimum(z)
+    ηmax0= maximum(h.+z)
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        z_plot(xc,yc,z)
+    savefig(path*"plot_z_init.png")
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        h_plot(xc,yc,h,maximum(h),nx,ny,0.0,flow_type)
+    savefig(path*"plot_h_init.png")
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        free_surface_plot(xc,yc,h,z,η0,0.75*(ηmax0-η0),nx,ny,0.0)
+    savefig(path*"plot_eta_init.png")
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        wave_plot(xc,yc,h,z,η0,(ηmax0-η0),nx,ny,0.0)
+    savefig(path*"plot_wave_height_init.png")
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        profile_plot(xc,yc,h,z,zmin,10.0,nx,ny,0.0)
+    savefig(path*"plot_profile_init.png")   
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        hs=hillshade(xc,yc,z,Δx,Δy,45.0,315.0,nx,ny)
+        hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
+    savefig(path*"plot_hillshade.png")
     savedData=DataFrame("x"=>vec(xc),"y"=>vec(yc))
     CSV.write(path*"xy.csv",savedData)
+    savedData=DataFrame("z"=>vec(z),"hs"=>vec(hs))
+    CSV.write(path*"zhs.csv",savedData)    
     # set & get vectors
     U,F,G = getUF(h,Qx,Qy,g,nx,ny)
     # set time
@@ -132,7 +157,7 @@ end
         it += 1
         if t > ctr*tC
             savedData=DataFrame("h"=>vec(h),"Qx"=>vec(Qx),"Qy"=>vec(Qy))
-            CSV.write(path*"hQxQyt_"*string(ctr)*".csv",savedData)
+            CSV.write(path*"hQxQy_"*string(ctr)*".csv",savedData)
             savedData=DataFrame("t"=>t,"Δt"=>Δt,"it"=>it)
             CSV.write(path*"tdt_"*string(ctr)*".csv",savedData)
             ctr+=1
