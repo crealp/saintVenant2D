@@ -34,7 +34,8 @@ The finite volume method (FVM) is used to solve the non-linear hyperbolic system
 An approximate Riemann solver was proposed by Harten, Lax and van Leer in 1983 and was coined HLL10 solver (Harten et al. 1983) and it requires estimates for the fastest signal velocities emerging at the local Riemann problem, i.e., the discontinuity. This resulted in a two-wave model. A more accurate method is the HLLC solver, proposed by Toro and co-workers in 1992, see Toro 2001; Toro 2019. It considers a three-wave model and better resolve intermediate waves at the discontinuity.
 
 Formally, the approximate numerical flux is given by the following (Toro 2001; Huang et al. 2013; Toro 2013; Toro 2019):
-$
+
+$$
 	\begin{align}
 		\mathbf{F}_{i+\frac{1}{2}}=
 		\begin{cases}
@@ -43,7 +44,7 @@ $
 			\mathbf{F}_{R}& \text{if}\quad s_R \leq 0,
 		\end{cases} 
 	\end{align}
-$
+$$
 
 where a reliable estimate for the wave speeds $s_{L,R}$ at the discontinuity (considering wet-dry transition) is needed, i.e., 
 $
