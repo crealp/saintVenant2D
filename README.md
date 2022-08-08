@@ -47,7 +47,7 @@ $$
 $$
 
 where a reliable estimate for the wave speeds $s_{L,R}$ at the discontinuity (considering wet-dry transition) is needed, i.e., 
-$
+$$
 \begin{align}
 		s_L=
 \begin{cases}
@@ -55,9 +55,9 @@ u_R - 2a_R & \text{if}\quad h_L = 0, \\
 \min(u_L - a_L,u_{\star} - a_{\star}) & \text{if}\quad h_L > 0, \\
 \end{cases} 
 \end{align} 
-$
+$$
 and,
-$
+$$
 	\begin{align}
 	s_R=
 	\begin{cases}
@@ -65,34 +65,34 @@ $
 		\max(u_R +a_R, u_{\star} - a_{\star}) & \text{if}\quad h_R > 0, \\
 	\end{cases} 
 \end{align} 
-$
+$$
 where
-$
+$$
 \begin{align}
 	h_{\star}&=\frac{1}{g}\left(\frac{1}{2}(a_L+a_R)+\frac{1}{4}(u_L-u_R)\right)^2, \\
 	u_{\star}&=\frac{1}{2}(u_L+u_R)+(a_L-a_R),\\
 	a_{L,R,\star}&=\sqrt{g h_{L,R,\star}}.
 \end{align}
-$
+$$
 ### **Rusanov and Lax-Friedrich fluxes**
 Another estimate for wave speed velocities is the following:
-$
+$$
 	\begin{align}
 		s_L = -s^{+} \quad \text{,} \quad s_R = s^{+},
 	\end{align}
-$
+$$
 where the estimate $s^{+}=\max(|u_L|+a_L,|u_R|+a_R)$. If $s_{L,R}$ are substituted in \ref{hll_fluxes} following this maximum wave speed estimate, one obtain the Rusanov flux, i.e., 
-$
+$$
 	\begin{align}
 		\mathbf{F}_{i\pm\frac{1}{2}}^{\mathrm{Rus}}= \frac{1}{2}(\mathbf{F}_{L}+\mathbf{F}_{R}) - \frac{1}{2}s^{+}(\mathbf{U}_{R}-\mathbf{U}_{L}).
 	\end{align}
-$
+$$
 If one selects $s^{+}=\frac{\Delta x}{\Delta t}$, this results in the Lax-Friedrich flux
-$
+$$
   \begin{align}
 	\mathbf{F}_{i\pm\frac{1}{2}}^{\mathrm{LF}}= \frac{1}{2}(\mathbf{F}_{L}+\mathbf{F}_{R}) - \frac{\Delta x}{2\Delta t}(\mathbf{U}_{R}-\mathbf{U}_{L}).
 	\end{align}
-$
+$$
 <div id='id-section2'/> 
 
 ## **Usage**
