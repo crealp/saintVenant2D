@@ -137,11 +137,6 @@ end
     # plot & time stepping parameters
     it    = 0
     ctr   = 0
-    # generate GIF
-    if make_gif==true
-        println("[=> initializing & configuring .gif...")
-        anim = Animation()
-    end
     # action
     println("[=> action!")
     prog  = ProgressUnknown("working hard:", spinner=true,showspeed=true)
