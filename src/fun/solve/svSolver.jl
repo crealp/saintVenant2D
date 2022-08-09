@@ -43,7 +43,7 @@ include("get.jl")
         profile_plot(xc,yc,h,z,zmin,10.0,nx,ny,0.0)
     savefig(path*"plot_profile_init.png")   
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
-        hs=hillshade(xc,yc,z,Δx,Δy,45.0,315.0,nx,ny)
+        hs=hillshade(z,Δx,Δy,45.0,315.0,nx,ny)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
     savefig(path*"plot_hillshade.png")
 
