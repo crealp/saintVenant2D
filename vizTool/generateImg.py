@@ -36,7 +36,7 @@ print('')
 print('o---------------------------------------------o')
 print('|               ** Plot data **               |')
 print('o---------------------------------------------o')
-print(' Field variable(s): export to h_*.png')
+print('Field variable(s): export to h_*.png')
 
 #plt.ion()
 n  = "./dat/zhs.csv"
@@ -66,5 +66,5 @@ for k in range(0,nsave+1,10):
 	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300, bbox_inches='tight')
 	cb.remove()
 	plt.draw()
-	print("Completion: "+str(round(k/nsave,2))+"\r")
+	print(" completion: "+str(round(k/nsave,2))+"\r")
 	

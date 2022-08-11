@@ -109,7 +109,7 @@ end
         z_plot(xc,yc,z)
     savefig(path_plot*"plot_z_init.png")
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
-        hs=hillshade(xc,yc,z,Δx,Δy,45.0,315.0,nx,ny)
+        hs=hillshade(z,Δx,Δy,45.0,315.0,nx,ny)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
     savefig(path_plot*"plot_hillshade.png")
     savedData=DataFrame("x"=>vec(xc))
