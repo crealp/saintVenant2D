@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 #from mpl_toolkits.axes_grid1 import make_axes_locatable
 import csv 
 
-from moviepy.editor import *
-from pathlib import Path
-
 # python3 display.py
 # latex 
 plt.rc('text', usetex=True)
