@@ -8,8 +8,14 @@ default(
     grid=false
     )
 ϵ    = 1.0e-10
-path_plot = "src/out/"
+path_plot = "viz/out/"
+if isdir(path_plot)==false
+    mkdir(path_plot)    
+end
 path_save = "viz/dat/"
+if isdir(path_save)==false
+    mkdir(path_save)    
+end
 
 # include dependencies & function call(s) for svSolver.jl
 include("../plots.jl")
