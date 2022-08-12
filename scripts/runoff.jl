@@ -26,11 +26,12 @@ include("../src/fun/solve/svSolver.jl")
     nx,ny = size(z)
     xc    = 1:Δ:nx*Δ
     yc    = 1:Δ:ny*Δ
+#=
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         hs=hillshade(z,Δ,Δ,45.0,315.0,nx,ny)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
-    savefig("src/out/"*"plot_hillshade_wide.png")
-
+    savefig("viz/out/"*"plot_hillshade_wide.png")
+=#
     xm  = [1750.0,2100.0]
     ym  = [750.0,1500.0]
     xm  = [0.0,1000.0]
@@ -50,11 +51,12 @@ include("../src/fun/solve/svSolver.jl")
     xc    = 1:Δ:nx*Δ
     yc    = 1:Δ:ny*Δ
 
+#=
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         hs=hillshade(z0,Δ,Δ,45.0,315.0,nx,ny)
         hillshade_plot(xc0,yc0,hs,45.0,315.0,0.75)
-    savefig("src/out/"*"plot_hillshade_crop.png")
-
+    savefig("viz/out/"*"plot_hillshade_crop.png")
+=#
 
     h     = 1.0e-3.*ones(Float64,nx,ny)
 
