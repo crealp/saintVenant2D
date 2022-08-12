@@ -63,7 +63,7 @@ include("../src/fun/solve/svSolver.jl")
     # action
     CFL   = 0.5
     T     = 10.0*60.0
-    tC    = 1.0
+    tC    = 60.0
     svSolverPerf(xc0,yc0,h,Qx,Qy,z0,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
 main()

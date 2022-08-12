@@ -9,7 +9,7 @@ default(
     )
 ϵ    = 1.0e-10
 path_plot = "src/out/"
-path_save = "vizTool/dat/"
+path_save = "viz/dat/"
 
 # include dependencies & function call(s) for svSolver.jl
 include("../plots.jl")
