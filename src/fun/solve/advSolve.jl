@@ -3,9 +3,9 @@ include("../bc/getBCs.jl")
 include("../flux/fluxes.jl")
 # core function(s)
 @views function updateU!(U,F,c,nx,ny,nD)
-    for dim in 1:nD
-        for j in 1:ny
-            for i in 1:nx
+    for dim ∈ 1:nD
+        for j ∈ 1:ny
+            for i ∈ 1:nx
                 U[i,j,dim] -= c*F[i,j,dim]
             end
         end

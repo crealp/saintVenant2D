@@ -2,8 +2,8 @@
     U = zeros(Float64,nx,ny,3)
     F = zeros(Float64,nx,ny,3)
     G = zeros(Float64,ny,nx,3)
-    for j in 1:ny
-        for i in 1:nx
+    for j ∈ 1:ny
+        for i ∈ 1:nx
             if h[i,j] > 0.0
                 U[i,j,1] = h[i,j]
                 U[i,j,2] = Qx[i,j]
@@ -23,8 +23,8 @@
 end
 @views function getU(h,Qx,Qy,nx,ny)
     U = zeros(Float64,nx,ny,3)
-    for j in 1:ny
-        for i in 1:nx
+    for j ∈ 1:ny
+        for i ∈ 1:nx
             if h[i,j] > 0.0
                 U[i,j,1] = h[i,j]
                 U[i,j,2] = Qx[i,j]
@@ -32,11 +32,11 @@ end
             end
         end
     end
-    return(U)
+    return U
 end
 @views function getU!(U,h,Qx,Qy,nx,ny)
-    for j in 1:ny
-        for i in 1:nx
+    for j ∈ 1:ny
+        for i ∈ 1:nx
             if h[i,j] > 0.0
                 U[i,j,1] = h[i,j]
                 U[i,j,2] = Qx[i,j]
@@ -50,23 +50,6 @@ end
     end
 end
 @views function getΔt(h,Qx,Qy,g,Δx,Δy,CFL,nx,ny)
-#=
-    # find minimal Δt consistent with CFL
-    cx = Δx/(sqrt(g*maximum(h)))
-    cy = Δy/(sqrt(g*maximum(h)))
-    for j ∈ 1:ny
-        for i ∈ 1:nx
-            if h[i,j] > 0.0
-                u  = Qx[i,j]/(h[i,j])
-                v  = Qy[i,j]/(h[i,j])
-                cx = min(cx,Δx/(abs(u)+sqrt(g*h[i,j])))
-                cy = min(cy,Δy/(abs(v)+sqrt(g*h[i,j])))
-            end
-        end
-    end
-    Δt= CFL*min(cx,cy)
-    return Δt
-=#
     # find minimal Δt consistent with CFL
     cx = 0.0
     cy = 0.0

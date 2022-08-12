@@ -23,15 +23,15 @@
     cL    = sqrt(g*hL)
     cR    = sqrt(g*hR)
     λ     = max(abs(uL-sqrt(g*hL)),abs(uR+sqrt(g*hR)))
-    for dim in 1:3
+    for dim ∈ 1:3
         fRus[dim] = (0.5*(FL[dim]+FR[dim])-0.5*λ*(UR[dim]-UL[dim]))
     end
     return fRus 
 end
 @views function Rus!(F,UL,UR,FL,FR,g,nx,ny,type)
     fRus = zeros(Float64,3)
-    for j in 1:ny
-        for i in 1:nx+1
+    for j ∈ 1:ny
+        for i ∈ 1:nx+1
             F[i,j,:] .= fluxRus(fRus,UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type)
         end
     end

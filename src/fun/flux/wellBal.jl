@@ -1,8 +1,8 @@
 # Hydrostatic reconstruction for variable topography
 @views function wellBal!(UL,UR,FL,FR,SL,SR,U,z,g,nx,ny,K,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
     if dim=="F"
-        for j in 1:ny
-            for i in 1:nx+1
+        for j ∈ 1:ny
+            for i ∈ 1:nx+1
             hL = max(0.0,U[i,j,1]+z[i,j]-max(z[i,j],z[i+1,j]))
             if hL > 0.0
                 UL[i,j,1] = hL
@@ -26,8 +26,8 @@
             end
         end
     elseif dim=="G"
-        for j in 1:ny
-            for i in 1:nx+1
+        for j ∈ 1:ny
+            for i ∈ 1:nx+1
             hL = max(0.0,U[i,j,1]+z[i,j]-max(z[i,j],z[i+1,j]))
             if hL > 0.0
                 UL[i,j,1] = hL
@@ -55,10 +55,10 @@ end
 @views function wellBal2!(UL,UR,FL,FR,SL,SR,U,z,g,nx,ny,K,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
     ϕb = 10.0*π/180
     ϕi = 35.0*π/180
-    Kact = 2*(1.0-sqrt(1.0-cos(ϕi)^2*(1.0+tan(ϕb)^2)))/cos(ϕi)^2-1
-    Kpas = 2*(1.0+sqrt(1.0-cos(ϕi)^2*(1.0+tan(ϕb)^2)))/cos(ϕi)^2-1
-    for j in 1:ny
-        for i in 1:nx+1
+    Kact = 2.0*(1.0-sqrt(1.0-cos(ϕi)^2*(1.0+tan(ϕb)^2)))/cos(ϕi)^2-1.0
+    Kpas = 2.0*(1.0+sqrt(1.0-cos(ϕi)^2*(1.0+tan(ϕb)^2)))/cos(ϕi)^2-1.0
+    for j ∈ 1:ny
+        for i ∈ 1:nx+1
         hL = max(0.0,U[i,j,1]+z[i,j]-max(z[i,j],z[i+1,j]))
         if hL > 0.0
             UL[i,j,1] = hL
