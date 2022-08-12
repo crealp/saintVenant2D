@@ -131,6 +131,7 @@ The general structure is given below:
 │   ├── out
 │   ├── run.sh
 │   └── saintVenant.jl
+├── viz
 └── start_macOS.sh
 ```
 
@@ -143,8 +144,12 @@ If needed, modifications can be made to these routines by changing initial param
 ### Run the routine ```geoflow.jl``` 
 
 0. (opt.) Get Julia [here](https://julialang.org/downloads/) and follow instructions
-1. Navigate to the local repo ``` ./saintVenant ``` 
-2. Launch Julia (on macOS, drag & drop ```start_macOS.sh``` in the terminal without navigating in terminal)
+1. Clone the repository
+```terminal
+git clone https://github.com/ewyser/saintVenant
+```
+2. Navigate to ``` ./saintVenant ``` 
+3. Launch Julia (on macOS, drag & drop ```start_macOS.sh``` in the terminal without navigating in terminal)
 ```julia
 % julia --project  
                _
@@ -157,8 +162,7 @@ If needed, modifications can be made to these routines by changing initial param
 |__/                   |
 
 ```
-
-3. Enter pkg mode ``` ] ``` and instantiate the environment
+4. Enter pkg mode ``` ] ``` and instantiate the environment
 ```julia
 (saintVenant) pkg> activate .
 (saintVenant) pkg> instantiate 
@@ -173,12 +177,12 @@ If needed, modifications can be made to these routines by changing initial param
   [92933f4c] ProgressMeter v1.7.2
   [8bb1440f] DelimitedFiles
 ```
-4. Run a script
+5. Run a script
 ```julia
 julia> include("./scripts/geoflow.jl")
 ```
 
-5. The outputs (figs, gif, etc.) are saved in the folder ``` ./src/out/ ```
+6. The outputs (figs, gif, etc.) are saved in the folder ``` ./src/out/ ```
 
 ### Play around in ```geoflow.jl```: a quick example
 The user can change initial parameter for the simulation, i.e., generate gif, select numerical flux, the rheological model or if precipitation is enable, such as
