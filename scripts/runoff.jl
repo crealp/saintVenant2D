@@ -13,28 +13,58 @@ include("../src/fun/solve/svSolver.jl")
     # physical constant
     g     = 9.81
     # number of points
-    path = "./docs/example/hillshade/data/dtm_1m.txt"
-    z = CSV.read(path,DataFrame,header=false; delim="\t")
-    show(z)
-    z = Array(z)'
+    path = "../dat/dtm_5m/dsm_sion.asc"
+    d = CSV.read(path,DataFrame,header=false; delim="\t", limit=6)
+    show(d)
+    d = Array(d)
+    x = Float64(d[3])
+    y = Float64(d[4])
+    Δ = Float64(d[5])
+    d = CSV.read(path,DataFrame,header=false; delim=" ", skipto=8)
+    z = Array(d[:,2:end])
+    z = (z[1:end,180:end])'
     nx,ny = size(z)
-    z = z[200:round(Int64,nx/2),round(Int64,ny/2):end]
+    xc    = 1:Δ:nx*Δ
+    yc    = 1:Δ:ny*Δ
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        hs=hillshade(z,Δ,Δ,45.0,315.0,nx,ny)
+        hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
+    savefig("src/out/"*"plot_hillshade_wide.png")
 
+    xm  = [1750.0,2100.0]
+    ym  = [750.0,1500.0]
+    xm  = [0.0,1000.0]
+    ym  = [0.0,1000.0]
+    xf  = vcat(xm,reverse(xm))
+    yf  = vcat(ym,reverse(ym))
 
-    nx,ny = size(z)
-    Δx    = 1.0
+    xId = findall(x->x>xm[1] && x<xm[2],xc)
+    yId = findall(x->x>ym[1] && x<ym[2],yc)
+
+    z0    = copy(z[xId,yId])
+    xc0   = copy(xc[xId])
+    yc0   = copy(yc[yId])
+    Δx    = Δ
     Δy    = Δx
-    xc    = 1:Δx:nx*Δx
-    yc    = 1:Δx:ny*Δy
+    nx,ny = size(z0)
+    xc    = 1:Δ:nx*Δ
+    yc    = 1:Δ:ny*Δ
+
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        hs=hillshade(z0,Δ,Δ,45.0,315.0,nx,ny)
+        hillshade_plot(xc0,yc0,hs,45.0,315.0,0.75)
+    savefig("src/out/"*"plot_hillshade_crop.png")
+
+
     h     = 1.0e-3.*ones(Float64,nx,ny)
 
     Qx    = zeros(Float64,nx,ny)
     Qy    = zeros(Float64,nx,ny)
     # action
     CFL   = 0.5
-    T     = 30.0*60.0
+    T     = 10.0*60.0
     tC    = 1.0
-    svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+    svSolverPerf(xc0,yc0,h,Qx,Qy,z0,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
 main()
 # https://techytok.com/lesson-parallel-computing
