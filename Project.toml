@@ -1,7 +1,7 @@
 name = "saintVenant"
 uuid = "c37ef97f-960b-44b2-99db-35f1aa5b9bae"
 authors = ["ewyser <manuwyser@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
