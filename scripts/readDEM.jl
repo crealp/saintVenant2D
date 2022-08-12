@@ -13,8 +13,9 @@ include("../src/fun/plots.jl")
     Δy = Δx
     xc = 1:Δx:nx*Δx
     yc = 1:Δx:ny*Δy
+    hs = zeros(Float64,nx,ny)
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
-    @time hs=hillshade(xc,yc,z,Δx,Δy,45.0,315.0,nx,ny)
+    @time hs.=hillshade(z,Δx,Δy,45.0,315.0,nx,ny)
     @time hillshade_plot(yc,xc,hs',45.0,315.0,0.75)
     savefig("./src/out/hillshade_from_DEM.png")
 

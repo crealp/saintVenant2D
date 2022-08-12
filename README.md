@@ -34,7 +34,8 @@ The finite volume method (FVM) is used to solve the non-linear hyperbolic system
 An approximate Riemann solver was proposed by Harten, Lax and van Leer in 1983 and was coined HLL10 solver (Harten et al. 1983) and it requires estimates for the fastest signal velocities emerging at the local Riemann problem, i.e., the discontinuity. This resulted in a two-wave model. A more accurate method is the HLLC solver, proposed by Toro and co-workers in 1992, see Toro 2001; Toro 2019. It considers a three-wave model and better resolve intermediate waves at the discontinuity.
 
 Formally, the approximate numerical flux is given by the following (Toro 2001; Huang et al. 2013; Toro 2013; Toro 2019):
-$
+
+$$
 	\begin{align}
 		\mathbf{F}_{i+\frac{1}{2}}=
 		\begin{cases}
@@ -43,10 +44,11 @@ $
 			\mathbf{F}_{R}& \text{if}\quad s_R \leq 0,
 		\end{cases} 
 	\end{align}
-$
+$$
 
 where a reliable estimate for the wave speeds $s_{L,R}$ at the discontinuity (considering wet-dry transition) is needed, i.e., 
-$
+
+$$
 \begin{align}
 		s_L=
 \begin{cases}
@@ -54,9 +56,11 @@ u_R - 2a_R & \text{if}\quad h_L = 0, \\
 \min(u_L - a_L,u_{\star} - a_{\star}) & \text{if}\quad h_L > 0, \\
 \end{cases} 
 \end{align} 
-$
+$$
+
 and,
-$
+
+$$
 	\begin{align}
 	s_R=
 	\begin{cases}
@@ -64,34 +68,43 @@ $
 		\max(u_R +a_R, u_{\star} - a_{\star}) & \text{if}\quad h_R > 0, \\
 	\end{cases} 
 \end{align} 
-$
+$$
+
 where
-$
+
+$$
 \begin{align}
 	h_{\star}&=\frac{1}{g}\left(\frac{1}{2}(a_L+a_R)+\frac{1}{4}(u_L-u_R)\right)^2, \\
 	u_{\star}&=\frac{1}{2}(u_L+u_R)+(a_L-a_R),\\
 	a_{L,R,\star}&=\sqrt{g h_{L,R,\star}}.
 \end{align}
-$
+$$
+
 ### **Rusanov and Lax-Friedrich fluxes**
 Another estimate for wave speed velocities is the following:
-$
+
+$$
 	\begin{align}
 		s_L = -s^{+} \quad \text{,} \quad s_R = s^{+},
 	\end{align}
-$
+$$
+
 where the estimate $s^{+}=\max(|u_L|+a_L,|u_R|+a_R)$. If $s_{L,R}$ are substituted in \ref{hll_fluxes} following this maximum wave speed estimate, one obtain the Rusanov flux, i.e., 
-$
+
+$$
 	\begin{align}
 		\mathbf{F}_{i\pm\frac{1}{2}}^{\mathrm{Rus}}= \frac{1}{2}(\mathbf{F}_{L}+\mathbf{F}_{R}) - \frac{1}{2}s^{+}(\mathbf{U}_{R}-\mathbf{U}_{L}).
 	\end{align}
-$
+$$
+
 If one selects $s^{+}=\frac{\Delta x}{\Delta t}$, this results in the Lax-Friedrich flux
-$
+
+$$
   \begin{align}
 	\mathbf{F}_{i\pm\frac{1}{2}}^{\mathrm{LF}}= \frac{1}{2}(\mathbf{F}_{L}+\mathbf{F}_{R}) - \frac{\Delta x}{2\Delta t}(\mathbf{U}_{R}-\mathbf{U}_{L}).
 	\end{align}
-$
+$$
+
 <div id='id-section2'/> 
 
 ## **Usage**
@@ -118,6 +131,7 @@ The general structure is given below:
 │   ├── out
 │   ├── run.sh
 │   └── saintVenant.jl
+├── viz
 └── start_macOS.sh
 ```
 
@@ -130,8 +144,12 @@ If needed, modifications can be made to these routines by changing initial param
 ### Run the routine ```geoflow.jl``` 
 
 0. (opt.) Get Julia [here](https://julialang.org/downloads/) and follow instructions
-1. Navigate to the local repo ``` ./saintVenant ``` 
-2. Launch Julia (on macOS, drag & drop ```start_macOS.sh``` in the terminal without navigating in terminal)
+1. Clone the repository
+```terminal
+git clone https://github.com/ewyser/saintVenant
+```
+2. Navigate to ``` ./saintVenant ``` 
+3. Launch Julia (on macOS, drag & drop ```start_macOS.sh``` in the terminal without navigating in terminal)
 ```julia
 % julia --project  
                _
@@ -144,8 +162,7 @@ If needed, modifications can be made to these routines by changing initial param
 |__/                   |
 
 ```
-
-3. Enter pkg mode ``` ] ``` and instantiate the environment
+4. Enter pkg mode ``` ] ``` and instantiate the environment
 ```julia
 (saintVenant) pkg> activate .
 (saintVenant) pkg> instantiate 
@@ -160,14 +177,14 @@ If needed, modifications can be made to these routines by changing initial param
   [92933f4c] ProgressMeter v1.7.2
   [8bb1440f] DelimitedFiles
 ```
-4. Run a script
+5. Run a script
 ```julia
 julia> include("./scripts/geoflow.jl")
 ```
 
-5. The outputs (figs, gif, etc.) are saved in the folder ``` ./src/out/ ```
+6. The outputs (figs, gif, etc.) are saved in the folder ``` ./src/out/ ```
 
-### Play in ```geoflow.jl```: a quick example
+### Play around in ```geoflow.jl```: a quick example
 The user can change initial parameter for the simulation, i.e., generate gif, select numerical flux, the rheological model or if precipitation is enable, such as
 ```julia 
 Dsim   = param("HLLC",false,"coulomb",false)

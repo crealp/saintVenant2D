@@ -1,16 +1,7 @@
 # include dependencies & function call(s)
 include("../bc/getBCs.jl")
 include("../flux/fluxes.jl")
-# core function(s)
-@views function updateU!(U,F,c,nx,ny,nD)
-    for dim in 1:nD
-        for j in 1:ny
-            for i in 1:nx
-                U[i,j,dim] -= c*F[i,j,dim]
-            end
-        end
-    end
-end
+include("../upd/update.jl")
 @views function advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,type)
     # assembly of conservative variables vector and flux function vector
         getU!(U,h,Qx,Qy,nx,ny)

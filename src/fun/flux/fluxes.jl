@@ -26,13 +26,7 @@ include("LxF.jl")
         sl[:,:,3].=SL[:,:]
         sr[:,:,3].=SR[:,:]
     end
-    if type=="LxF"
-        if dim=="x"
-            LxF!(f,UL,UR,FL,FR,g,Δx/Δt,nx,ny,"F")
-        elseif dim=="y"
-            LxF!(f,UL,UR,FL,FR,g,Δx/Δt,nx,ny,"G")
-        end
-    elseif type=="Rus"
+    if type=="Rus"
         if dim=="x"
             Rus!(f,UL,UR,FL,FR,g,nx,ny,"F")
         elseif dim=="y"
