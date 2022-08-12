@@ -5,7 +5,7 @@ img_clips = []
 path_list=[]
 
 #accessing path of each image
-for image in os.listdir('img/'):
+for image in sorted(os.listdir('img/')):
     if image.endswith(".png"):
         path_list.append(os.path.join('img/', image))
 #creating slide for each image

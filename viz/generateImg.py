@@ -33,7 +33,7 @@ print('')
 print('o---------------------------------------------o')
 print('|               ** Plot data **               |')
 print('o---------------------------------------------o')
-print('Field variable(s): export to h_*.png')
+print('generate fig & export to h_*.png')
 
 #plt.ion()
 n  = "./dat/zhs.csv"
@@ -41,7 +41,7 @@ D  = np.genfromtxt(n, delimiter=',')
 hs = np.reshape(D[1:nx*ny+1,1],(ny,nx))
 
 fig, ax = plt.subplots(figsize=(4,4)) 
-for k in range(0,nsave+1,10):
+for k in range(0,nsave+1,1):
 	# load data
 	name = "./dat/tdt_"+str(k)+".csv"
 	D    = np.genfromtxt(name, delimiter=',')
