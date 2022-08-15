@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 #from mpl_toolkits.axes_grid1 import make_axes_locatable
 import csv 
+import os
 
 # python3 display.py
 # latex 
@@ -39,6 +40,10 @@ print('generate fig & export to h_*.png')
 n  = "./dat/zhs.csv"
 D  = np.genfromtxt(n, delimiter=',')
 hs = np.reshape(D[1:nx*ny+1,1],(ny,nx))
+
+
+if not os.path.exists('./img'):
+	os.makedirs('./img') 
 
 fig, ax = plt.subplots(figsize=(4,4)) 
 for k in range(0,nsave+1,1):
