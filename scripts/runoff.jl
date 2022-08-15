@@ -58,14 +58,14 @@ include("../src/fun/solve/svSolver.jl")
     savefig("viz/out/"*"plot_hillshade_crop.png")
 =#
 
-    h     = 1.0e-3.*ones(Float64,nx,ny)
+    h     = 1.0e-6.*ones(Float64,nx,ny)
 
     Qx    = zeros(Float64,nx,ny)
     Qy    = zeros(Float64,nx,ny)
     # action
     CFL   = 0.5
-    T     = 10.0*60.0
-    tC    = 60.0
+    T     = 60.0*60.0
+    tC    = 600.0
     svSolverPerf(xc0,yc0,h,Qx,Qy,z0,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
 main()

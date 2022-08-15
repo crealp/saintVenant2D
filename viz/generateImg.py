@@ -61,7 +61,7 @@ for k in range(0,nsave+1,1):
 	plt.xlabel('Easting [m]')
 	plt.ylabel('Northing [m]')	
 	cb=fig.colorbar(im, orientation = 'horizontal',extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
-	im.set_clim(0.0,0.1)
+	im.set_clim(0.0,1e-2)
 	plt.title("$t_{\mathrm{e}}$ = "+str(time.strftime('%H:%M:%S',time.gmtime(t)))+" [s]")
 	# save plot & reinit
 

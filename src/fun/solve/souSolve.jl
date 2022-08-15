@@ -105,10 +105,7 @@ end
 
     for j ∈ 1:ny
         for i ∈ 1:nx
-            if r>0.0 && t<3600.0
-                p=r*ϵp
-                S[i,j,1] = p
-            end
+            S[i,j,1] = ϵp
         end
     end
     return nothing
@@ -125,7 +122,7 @@ end
 
     if pcpt_onoff==true
         #precip!(S,1.0e-3/3600.0,t,nx,ny)
-        precip!(S,1.0e-3,t,nx,ny)
+        precip!(S,8.0e-6,t,nx,ny)
     end
     # assembly of conservative variables vector and flux function vector
     getU!(U,h,Qx,Qy,nx,ny)
