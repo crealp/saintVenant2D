@@ -6,6 +6,7 @@
             end
         end
     end
+    return nothing
 end
 @views function updateAdvU!(U,S,Δt,nx,ny,nD,flow_type)
     if flow_type=="coulomb"
@@ -30,4 +31,5 @@ end
             end
         end
     end
+    return nothing
 end

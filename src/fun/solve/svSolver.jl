@@ -103,6 +103,7 @@ include("get.jl")
     free_surface_plot(xc,yc,h,z,η0,0.3*(maximum(h.+z)-η0),nx,ny,t)
     savefig(path_plot*solv_type*"_freesurface.png")
     println("[=> done! exiting...")
+    return nothing
 end
 @views function svSolverPerf(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
     solv_type  = Dsim.solv_type
@@ -158,4 +159,5 @@ end
     param=DataFrame("nx"=>nx,"ny"=>ny,"dx"=>Δx,"dy"=>Δy,"t"=>T,"CFl"=>CFL,"nsave"=>ctr-1)
     CSV.write(path_save*"parameters.csv",param)
     println("[=> done! exiting...")
+    return nothing
 end

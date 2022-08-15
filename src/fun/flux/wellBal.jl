@@ -51,6 +51,7 @@
             end
         end
     end    
+    return nothing
 end
 @views function wellBal2!(UL,UR,FL,FR,SL,SR,U,z,g,nx,ny,K,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
     ϕb = 10.0*π/180

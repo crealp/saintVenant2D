@@ -111,6 +111,7 @@ end
             end
         end
     end
+    return nothing
 end
 @views function souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
     S  = zeros(Float64,nx,ny,3)

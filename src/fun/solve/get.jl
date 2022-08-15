@@ -48,6 +48,7 @@ end
             end
         end
     end
+    return nothing
 end
 @views function getΔt(h,Qx,Qy,g,Δx,Δy,CFL,nx,ny)
     # find minimal Δt consistent with CFL

@@ -35,4 +35,5 @@ end
             F[i,j,:] .= fluxRus(fRus,UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type)
         end
     end
+    return nothing
 end

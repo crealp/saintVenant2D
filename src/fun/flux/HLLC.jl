@@ -107,4 +107,5 @@ end
             F[i,j,:] .= fluxHLLC(fHLL,fstarL,fstarR,fstar,UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type,3)
         end
     end
+    return nothing
 end
