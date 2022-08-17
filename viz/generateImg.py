@@ -3,6 +3,10 @@ import time
 import datetime
 import numpy as np 
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib.cbook as cbook
+from matplotlib import cm
+
 #from mpl_toolkits.axes_grid1 import make_axes_locatable
 import csv 
 import os
@@ -67,12 +71,12 @@ for k in range(0,nsave+1,1):
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
 	im = ax.imshow(hs, cmap=cBtype0, alpha=1.0, interpolation='bicubic')
-	im = ax.imshow(h , cmap=cBtype , alpha=0.5, interpolation='bicubic')
+	im = ax.imshow(h , cmap=cBtype , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
+	#im = ax.imshow(h , cmap=cBtype , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2)
 	fig.gca().set_aspect('equal', adjustable='box')
 	plt.xlabel('Easting [m]')
 	plt.ylabel('Northing [m]')	
 	cb=fig.colorbar(im, orientation = 'horizontal',extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
-	im.set_clim(0.0,1e-2)
 	plt.title("$t_{\mathrm{e}}$ = "+str(time.strftime('%H:%M:%S',time.gmtime(t)))+" [s]")
 	# save plot & reinit
 

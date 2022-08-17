@@ -57,9 +57,8 @@ for k in range(0,nsave+1,1):
 	D    = np.genfromtxt(name, delimiter=',')
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
-	im = ax.imshow(h,extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], origin='lower', cmap='viridis' , alpha=1.0, interpolation='bicubic')
+	im = ax.imshow(h,extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], origin='lower', cmap='viridis' , alpha=1.0, interpolation='bicubic',vmin=0.0,vmax=0.5)
 	cb=fig.colorbar(im, orientation = 'horizontal',shrink=0.5,extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
-	im.set_clim(0.0,0.5)
 	im = ax.contour(xc,yc, np.transpose(h) , colors='black',linewidths=1.0,levels=[0.031,0.062,0.125,0.25,0.5])
 	ax.clabel(im,inline=True, fontsize=5)
 	fig.gca().set_aspect('equal', adjustable='box')
