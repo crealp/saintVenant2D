@@ -23,7 +23,7 @@ include("../src/fun/solve/svSolver.jl")
     CFL    = 0.5
     T      = 5.0
     tC     = 1.0/25.0
-    svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+    svSolverPerf(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
 main()
 # https://techytok.com/lesson-parallel-computing

@@ -68,5 +68,6 @@ for k in range(0,nsave+1,1):
 	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300, bbox_inches='tight')
 	cb.remove()
 	plt.draw()
+	ax.cla()
 	print(" completion: "+str(round(k/nsave,2))+"\r")
 	

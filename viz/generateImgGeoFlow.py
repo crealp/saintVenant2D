@@ -57,10 +57,10 @@ for k in range(0,nsave+1,1):
 	D    = np.genfromtxt(name, delimiter=',')
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
-	im = ax.imshow(h , cmap='viridis' , alpha=1.0, interpolation='bicubic')
-	cb=fig.colorbar(im, orientation = 'horizontal',extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
+	im = ax.imshow(h,extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], origin='lower', cmap='viridis' , alpha=1.0, interpolation='bicubic')
+	cb=fig.colorbar(im, orientation = 'horizontal',shrink=0.5,extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
 	im.set_clim(0.0,0.5)
-	im = ax.contour(h , colors='black',linewidths=1.0,levels=[0.031,0.062,0.125,0.25,0.5])
+	im = ax.contour(xc,yc, np.transpose(h) , colors='black',linewidths=1.0,levels=[0.031,0.062,0.125,0.25,0.5])
 	ax.clabel(im,inline=True, fontsize=5)
 	fig.gca().set_aspect('equal', adjustable='box')
 	plt.xlabel('Easting [m]')
@@ -69,9 +69,10 @@ for k in range(0,nsave+1,1):
 	plt.title("$t_{\mathrm{e}}$ = "+str(time.strftime('%H:%M:%S',time.gmtime(t)))+" [s]")
 	# save plot & reinit
 
-	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300, bbox_inches='tight')
+	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300)
 	cb.remove()
 	plt.draw()
-	print(" completion: "+str(round(k/nsave,2))+"\r")
 	ax.cla()
+	print(" completion: "+str(round(k/nsave,2))+"\r")
+
 	
