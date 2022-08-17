@@ -39,13 +39,24 @@ print('generate fig & export to h_*.png')
 #plt.ion()
 n  = "./dat/zhs.csv"
 D  = np.genfromtxt(n, delimiter=',')
+z  = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 hs = np.reshape(D[1:nx*ny+1,1],(ny,nx))
 
 
 if not os.path.exists('./img'):
 	os.makedirs('./img') 
 
+a = np.linspace(np.amin(z),np.amax(z),20)
+
 fig, ax = plt.subplots(figsize=(4,4)) 
+im = ax.contour(xc,yc, np.transpose(np.flip(z,axis=0)), levels=a, colors='black',linewidths=1.0)
+ax.clabel(im,inline=True, fontsize=5)
+fig.gca().set_aspect('equal', adjustable='box')
+plt.xlabel('Easting [m]')
+plt.ylabel('Northing [m]')	
+plt.savefig('./img/contour.png', dpi=300, bbox_inches='tight')
+ax.cla()
+
 for k in range(0,nsave+1,1):
 	# load data
 	name = "./dat/tdt_"+str(k)+".csv"
