@@ -53,14 +53,6 @@ if not os.path.exists('./img'):
 a = np.linspace(np.amin(z),np.amax(z),20)
 
 fig, ax = plt.subplots(figsize=(4,4)) 
-im = ax.contour(xc,yc, np.transpose(np.flip(z,axis=0)), levels=a, colors='black',linewidths=1.0)
-ax.clabel(im,inline=True, fontsize=5)
-fig.gca().set_aspect('equal', adjustable='box')
-plt.xlabel('Easting [m]')
-plt.ylabel('Northing [m]')	
-plt.savefig('./img/contour.png', dpi=300, bbox_inches='tight')
-ax.cla()
-
 for k in range(0,nsave+1,1):
 	# load data
 	name = "./dat/tdt_"+str(k)+".csv"
@@ -70,17 +62,17 @@ for k in range(0,nsave+1,1):
 	D    = np.genfromtxt(name, delimiter=',')
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
-	im = ax.imshow(hs, cmap=cBtype0, alpha=1.0, interpolation='bicubic')
-	im = ax.imshow(h , cmap=cBtype , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
-	#im = ax.imshow(h , cmap=cBtype , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2)
+	im = ax.imshow(hs, extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype0, alpha=1.0, interpolation='bicubic')
+	im = ax.imshow(h , extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
+	#im = ax.imshow(h , extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2)
 	fig.gca().set_aspect('equal', adjustable='box')
 	plt.xlabel('Easting [m]')
 	plt.ylabel('Northing [m]')	
-	cb=fig.colorbar(im, orientation = 'horizontal',extend='max',pad=0.2,label=r'$h(x,y)$ [m]')
+	cb=fig.colorbar(im, orientation = 'horizontal',extend='max',pad=0.2,label=r'$h(x,y)$ [m]',shrink=0.5)
 	plt.title("$t_{\mathrm{e}}$ = "+str(time.strftime('%H:%M:%S',time.gmtime(t)))+" [s]")
 	# save plot & reinit
 
-	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300, bbox_inches='tight')
+	plt.savefig('./img/h_'+str(k).zfill(3)+'.png', dpi=300)
 	cb.remove()
 	plt.draw()
 	ax.cla()
