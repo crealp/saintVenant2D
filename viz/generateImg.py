@@ -52,6 +52,19 @@ if not os.path.exists('./img'):
 
 a = np.linspace(np.amin(z),np.amax(z),20)
 
+
+fig0, ax0 = plt.subplots(figsize=(4,4)) 
+im0 = ax0.imshow(z, extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap='gist_earth', alpha=1.0, interpolation='bicubic', vmin=z.min(), vmax=z.max())
+fig0.gca().set_aspect('equal', adjustable='box')
+plt.xlabel('Easting [m]')
+plt.ylabel('Northing [m]')	
+cb0=fig0.colorbar(im0, orientation = 'horizontal',extend='max',pad=0.2,label=r'$z(x,y)$ [m]',shrink=0.5)
+plt.title("Terrain elevation")
+plt.savefig('./img/z.png', dpi=300)
+cb0.remove()
+plt.draw()
+ax0.cla()
+
 fig, ax = plt.subplots(figsize=(4,4)) 
 for k in range(0,nsave+1,1):
 	# load data
