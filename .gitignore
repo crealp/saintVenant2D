@@ -1,4 +1,4 @@
 .DS_Store
-./dat
-./out
-./img
+viz/dat
+viz/out
+viz/img
