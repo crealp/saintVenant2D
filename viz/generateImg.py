@@ -17,7 +17,6 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='serif')
 #plt.xkcd()
 # colorbar
-cBtype0 = 'Greys_r'
 cBtype  = 'Blues'
 
 # import data for post-processing 
@@ -32,8 +31,6 @@ xc   = D[1:nx*ny+1]
 xc   = np.transpose(np.tile(D[1:nx*ny+1],(ny,1)))
 D    = np.genfromtxt('./dat/y.csv', delimiter=',')
 yc   = np.tile(D[1:nx*ny+1],(nx,1))
-print(xc.shape)
-print(yc.shape)
 
 print('')
 print('o---------------------------------------------o')
@@ -53,9 +50,10 @@ if not os.path.exists('./img'):
 
 lvl = np.linspace(round(np.amin(z)),round(np.amax(z)),20)
 lvl = np.arange(round(np.amin(z)),round(np.amax(z)),10)
+lim = [0.0, np.amax(xc), 0.0, np.amax(yc)]
 
 fig0, ax0 = plt.subplots(figsize=(4,4)) 
-im0 = ax0.imshow(z, extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap='gist_earth', alpha=1.0, interpolation='bicubic', vmin=z.min(), vmax=z.max())
+im0 = ax0.imshow(z, extent=lim, cmap='gist_earth', alpha=1.0, interpolation='bicubic', vmin=z.min(), vmax=z.max())
 fig0.gca().set_aspect('equal', adjustable='box')
 plt.xlabel('Easting [m]')
 plt.ylabel('Northing [m]')	
@@ -78,9 +76,9 @@ for k in range(0,nsave+1,1):
 	D    = np.genfromtxt(name, delimiter=',')
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
-	im = ax.imshow(hs, extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype0, alpha=1.0, interpolation='bicubic')
-	im = ax.imshow(h , extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
-	#im = ax.imshow(h , extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap=cBtype , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2)
+	#im = ax.imshow(hs, extent=lim, cmap='binary_r', alpha=1.0, interpolation='bicubic'                                           )
+	#im = ax.imshow(h , extent=lim, cmap=cBtype    , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
+	im = ax.imshow(h , extent=lim, cmap=cBtype    , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2                     )
 	fig.gca().set_aspect('equal', adjustable='box')
 	plt.xlabel('Easting [m]')
 	plt.ylabel('Northing [m]')	
@@ -92,5 +90,6 @@ for k in range(0,nsave+1,1):
 	cb.remove()
 	plt.draw()
 	ax.cla()
-	print(" completion: "+str(round(k/nsave,2))+"\r")
+	print(" completion: "+str(round(k/nsave,2)*100)+" %",end="\r")
+print("\n done!\n")
 	
