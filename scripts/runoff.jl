@@ -14,24 +14,16 @@ include("../src/fun/solve/svSolver.jl")
     g     = 9.81
     # number of points
     path = "../dat/dtm_5m/dsm_sion.asc"
-    d = CSV.read(path,DataFrame,header=false; delim="\t", limit=6)
-    show(d)
-    d = Array(d)
+    d = Array(CSV.read(path,DataFrame,header=false; delim="\t", limit=6))
     x = Float64(d[3])
     y = Float64(d[4])
     Δ = Float64(d[5])
-    d = CSV.read(path,DataFrame,header=false; delim=" ", skipto=8)
-    z = Array(d[:,2:end])
+    z = Array(CSV.read(path,DataFrame,header=false; delim=" ", skipto=8)[:,2:end])
     z = (z[1:end,180:end])'
     nx,ny = size(z)
-    xc    = 1:Δ:nx*Δ
-    yc    = 1:Δ:ny*Δ
-#=
-    gr(size=(2*250,2*125),legend=true,markersize=2.5)
-        hs=hillshade(z,Δ,Δ,45.0,315.0,nx,ny)
-        hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
-    savefig("viz/out/"*"plot_hillshade_wide.png")
-=#
+    xc    = 0.0:Δ:nx*Δ
+    yc    = 0.0:Δ:ny*Δ
+
     xm  = [1750.0,2100.0]
     ym  = [750.0,1500.0]
     xm  = [0.0,1000.0]
@@ -48,18 +40,10 @@ include("../src/fun/solve/svSolver.jl")
     Δx    = Δ
     Δy    = Δx
     nx,ny = size(z0)
-    xc    = 1:Δ:nx*Δ
-    yc    = 1:Δ:ny*Δ
-
-#=
-    gr(size=(2*250,2*125),legend=true,markersize=2.5)
-        hs=hillshade(z0,Δ,Δ,45.0,315.0,nx,ny)
-        hillshade_plot(xc0,yc0,hs,45.0,315.0,0.75)
-    savefig("viz/out/"*"plot_hillshade_crop.png")
-=#
+    xc    = 0.0:Δx:nx*Δx
+    yc    = 0.0:Δy:ny*Δy
 
     h     = 1.0e-6.*ones(Float64,nx,ny)
-
     Qx    = zeros(Float64,nx,ny)
     Qy    = zeros(Float64,nx,ny)
     # action
