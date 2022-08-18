@@ -24,6 +24,7 @@ cBtype  = 'Blues'
 D    = np.genfromtxt('./dat/parameters.csv', delimiter=',')
 nx   = int(D[1,0])
 ny   = int(D[1,1])
+dx   = float(D[1,2])
 nsave= int(D[1,6])
 D    = np.genfromtxt('./dat/x.csv', delimiter=',')
 xc   = D[1:nx*ny+1]
@@ -50,8 +51,8 @@ hs = np.reshape(D[1:nx*ny+1,1],(ny,nx))
 if not os.path.exists('./img'):
 	os.makedirs('./img') 
 
-a = np.linspace(np.amin(z),np.amax(z),20)
-
+lvl = np.linspace(round(np.amin(z)),round(np.amax(z)),20)
+lvl = np.arange(round(np.amin(z)),round(np.amax(z)),10)
 
 fig0, ax0 = plt.subplots(figsize=(4,4)) 
 im0 = ax0.imshow(z, extent=[0.0, np.amax(xc), 0.0, np.amax(yc)], cmap='gist_earth', alpha=1.0, interpolation='bicubic', vmin=z.min(), vmax=z.max())
@@ -59,8 +60,10 @@ fig0.gca().set_aspect('equal', adjustable='box')
 plt.xlabel('Easting [m]')
 plt.ylabel('Northing [m]')	
 cb0=fig0.colorbar(im0, orientation = 'horizontal',extend='max',pad=0.2,label=r'$z(x,y)$ [m]',shrink=0.5)
-plt.title("Terrain elevation")
-plt.savefig('./img/z.png', dpi=300)
+im0 = ax0.contour(xc,yc, np.transpose(np.flip(z,axis=0)), levels=lvl, colors='black',linewidths=0.5)
+ax0.clabel(im0,inline=True, fontsize=3.75)
+plt.title('DTM, $\Delta_{x,y}=$ '+str(round(dx))+' [m]')
+plt.savefig('./img/DTM.png', dpi=300)
 cb0.remove()
 plt.draw()
 ax0.cla()
