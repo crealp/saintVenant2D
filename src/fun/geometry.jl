@@ -319,3 +319,36 @@ end
     end
     return(h,z,xc,yc,Δx,Δy)
 end
+@views function chen_etal_2013(lx,ly,nx,ny)
+    # test the well-balanced property of the solver from the following reference
+    #=
+    A robust 2D shallow water model for solving flow over complex topography using homogenous flux method
+    M. Guan*,†, N. G. Wright and P. A. Sleigh
+    =#
+
+    # number of points
+    Δx,Δy  = lx/nx,ly/ny 
+    x,y    = 0.0:Δx:lx,0.0:Δy:ly
+    # calculate midpoint values of x in each control vlume
+    xc,yc  = 0.5.*(x[1:nx]+x[2:nx+1]),0.5.*(y[1:ny]+y[2:ny+1])
+    # set initial bed topography
+    z      = zeros(Float64,nx,ny)
+    for j ∈ 1:ny
+        for i ∈ 1:nx
+            if xc[i]>0.45
+                z[i,j]=max(0.0,0.25-5.0*((xc[i]-0.7)^2+(yc[j]-0.5)^2))
+            elseif xc[i]<=0.45
+                z[i,j]=max(0.0,0.1-10.0*((xc[i]-0.3)^2+(yc[j]-0.5)^2))
+            end
+        end
+    end
+    # set initial fluid height
+    hi     = 0.15
+    h      = zeros(Float64,nx,ny)
+    for i ∈ 1:nx
+        for j ∈ 1:ny
+            h[i,j]=max(0.0,hi-z[i,j])
+        end
+    end
+    return(h,z,xc,yc,Δx,Δy)
+end
