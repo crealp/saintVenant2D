@@ -76,7 +76,7 @@ for k in range(0,nsave+1,1):
 	D    = np.genfromtxt(name, delimiter=',')
 	h    = np.reshape(D[1:nx*ny+1,0],(ny,nx))
 	# plot data
-	#im = ax.imshow(hs, extent=lim, cmap='binary_r', alpha=1.0, interpolation='bicubic'                                           )
+	im = ax.imshow(hs, extent=lim, cmap='binary_r', alpha=1.0, interpolation='bicubic'                                           )
 	#im = ax.imshow(h , extent=lim, cmap=cBtype    , alpha=0.5, interpolation='bicubic', norm=colors.LogNorm(vmin=1e-4, vmax=1e-2))
 	im = ax.imshow(h , extent=lim, cmap=cBtype    , alpha=0.5, interpolation='bicubic', vmin=1e-4, vmax=1e-2                     )
 	fig.gca().set_aspect('equal', adjustable='box')
