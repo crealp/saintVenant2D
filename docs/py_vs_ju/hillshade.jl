@@ -61,7 +61,7 @@ end
 end
 
 @views function main()
-    path = "./scripts/py_vs_ju/dat/parameters.csv"
+    path = "./docs/py_vs_ju/dat/parameters.csv"
     # get infos in headers
     D = CSV.read(path,DataFrame,header=true; delim=",")
     D = Array(D[1,:])
@@ -69,21 +69,21 @@ end
     ny= Int64(D[2])
     dx= Float64(D[3])
     dy= Float64(D[4])
-    path = "./scripts/py_vs_ju/dat/x.csv"
+    path = "./docs/py_vs_ju/dat/x.csv"
     # get infos in headers
     D = CSV.read(path,DataFrame,header=1; delim=",")
     xc= Array(D[:,1])
-    path = "./scripts/py_vs_ju/dat/y.csv"
+    path = "./docs/py_vs_ju/dat/y.csv"
     # get infos in headers
     D = CSV.read(path,DataFrame,header=1; delim=",")
     yc= Array(D[:,1])
-    path = "./scripts/py_vs_ju/dat/zhs.csv"
+    path = "./docs/py_vs_ju/dat/zhs.csv"
     # get infos in headers
     D = CSV.read(path,DataFrame,header=1; delim=",") 
     z = reshape(Array(D[:,1]),nx,ny)
     @time hs=hillshade(z,dx,dy,45.0,315.0,nx,ny)
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
-    savefig("./scripts/py_vs_ju/julia_hillshade.png")
+    savefig("./docs/py_vs_ju/julia_hillshade.png")
 end
 main()

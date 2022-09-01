@@ -76,7 +76,7 @@ for i in range(1,ny-1):
             HS[i,j]=1.0
 
 toc = time.perf_counter()
-print(f"Downloaded the tutorial in {toc - tic:0.4f} seconds")
+print(f"hillshade computed in {toc - tic:0.4f} seconds")
 
 fig, ax = plt.subplots(figsize=(4,4)) 
 im = ax.imshow(hs, cmap=cBtype0, alpha=1.0, interpolation='bicubic')
