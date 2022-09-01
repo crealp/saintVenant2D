@@ -20,6 +20,10 @@ function hillshade_D!(as,hs,z,Δx,Δy,ϕ,θ,nx,ny)
 
         ∂zx = ((C+2.0*F+I)-(A+2.0*D+G))*Δx
         ∂zy = ((G+2.0*H+I)-(A+2.0*B+C))*Δy
+        #= TO BE TESTED
+        ∂zx = ((z[i-1,j+1]+2.0*z[i  ,j+1]+z[i+1,j+1])-(z[i-1,j-1]+2.0*z[i  ,j-1]+z[i+1,j-1]))*Δx
+        ∂zy = ((z[i+1,j-1]+2.0*z[i+1,j  ]+z[i+1,j+1])-(z[i-1,j-1]+2.0*z[i-1,j  ]+z[i-1,j+1]))*Δy
+        =#
         s   = atand(sqrt(∂zx^2+∂zy^2))
         a   = atand(∂zy,-∂zx)
         
