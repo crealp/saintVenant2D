@@ -53,6 +53,7 @@ include("get.jl")
         hs=hillshade(z,Δx,Δy,45.0,315.0,nx,ny)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
     savefig(path_plot*"plot_hillshade.png")
+    @info "Figs saved in" path_plot
 
     # set & get vectors
     U,F,G = getUF(h,Qx,Qy,g,nx,ny)
@@ -119,12 +120,13 @@ end
         hs=hillshade(z,Δx,Δy,45.0,315.0,nx,ny)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
     savefig(path_plot*"plot_hillshade.png")
+    @info "Figs saved in" path_plot
     savedData=DataFrame("x"=>vec(xc))
     CSV.write(path_save*"x.csv",savedData)
     savedData=DataFrame("y"=>vec(yc))
     CSV.write(path_save*"y.csv",savedData)
     savedData=DataFrame("z"=>vec(z),"hs"=>vec(hs))
-    CSV.write(path_save*"zhs.csv",savedData)    
+    CSV.write(path_save*"zhs.csv",savedData)  
     # set & get vectors
     U,F,G = getUF(h,Qx,Qy,g,nx,ny)
     # set time
@@ -158,6 +160,7 @@ end
     ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
     param=DataFrame("nx"=>nx,"ny"=>ny,"dx"=>Δx,"dy"=>Δy,"t"=>T,"CFl"=>CFL,"nsave"=>ctr-1)
     CSV.write(path_save*"parameters.csv",param)
+    @info "Data saved in" path_save  
     println("[=> done! exiting...")
     return nothing
 end
