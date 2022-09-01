@@ -1,7 +1,7 @@
 # include dependencies & function call(s)
 using Plots, LaTeXStrings, Base.Threads, ProgressMeter, CSV, DataFrames, CUDA
 
-function hillshade_D!(as,hs,z,Δx,Δy,ϕ,θ,nx,ny)
+@views function hillshade_D!(as,hs,z,Δx,Δy,ϕ,θ,nx,ny)
     # index initialization
     i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
     j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
