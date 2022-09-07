@@ -55,8 +55,34 @@ include("get.jl")
     savefig(path_plot*"plot_hillshade.png")
     @info "Figs saved in" path_plot
 
+    # define grid & block sizes for kernel initialization
+    BLOCKx    = 4
+    BLOCKy    = 8
+    GRIDx     = ceil(Int,nx/BLOCKx)
+    GRIDy     = ceil(Int,ny/BLOCKy)
+    cuthreads = (BLOCKx, BLOCKy, 1)
+    cublocks  = (GRIDx,  GRIDy,  1)
+    @info "GPU kernel:" cuthreads,cublocks nx,ny
+    # allocate memory on GPU, i.e., variable on device specified by <nameOfVariable>_D
+    h_D       = CUDA.zeros(Float64,nx,ny)
+    copyto!(h_D,h)
+    Qx_D      = CUDA.zeros(Float64,nx,ny)
+    copyto!(Qx_D,Qx)
+    Qy_D      = CUDA.zeros(Float64,nx,ny)
+    copyto!(Qy_D,Qy)
+    U_D       = CUDA.zeros(Float64,nx,ny,3)
+    F_D       = CUDA.zeros(Float64,nx,ny,3)
+    G_D       = CUDA.zeros(Float64,nx,ny,3)
+    z_D       = CUDA.zeros(Float64,nx,ny)
+    copyto!(z_D,z)
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        temp = Array(h_D)
+        h_plot(xc,yc,temp,maximum(temp),nx,ny,0.0,flow_type)
+    savefig(path_plot*"plot_h_init_GPU.png")
+
     # set & get vectors
-    U,F,G = getUF(h,Qx,Qy,g,nx,ny)
+    CUDA.@time @cuda blocks=cublocks threads=cuthreads getUF_D(U_D,F_D,G_D,h_D,Qx_D,Qy_D,g,nx,ny)
+    synchronize()
     # set time
     t     = 0.0
     # plot & time stepping parameters

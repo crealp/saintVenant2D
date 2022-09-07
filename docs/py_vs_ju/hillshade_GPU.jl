@@ -109,7 +109,7 @@ end
     #nx,ny = size(z)
 
     # define grid & block sizes for kernel initialization
-    BLOCKx    = 8
+    BLOCKx    = 4
     BLOCKy    = 8
     GRIDx     = ceil(Int,nx/BLOCKx)
     GRIDy     = ceil(Int,ny/BLOCKy)

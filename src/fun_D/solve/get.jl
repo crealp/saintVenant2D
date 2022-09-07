@@ -1,25 +1,24 @@
-@views function getUF(h,Qx,Qy,g,nx,ny)
-    U = zeros(Float64,nx,ny,3)
-    F = zeros(Float64,nx,ny,3)
-    G = zeros(Float64,ny,nx,3)
-    for j ∈ 1:ny
-        for i ∈ 1:nx
-            if h[i,j] > 0.0
-                U[i,j,1] = h[i,j]
-                U[i,j,2] = Qx[i,j]
-                U[i,j,3] = Qy[i,j]
+@views function getUF_D(U,F,G,h,Qx,Qy,g,nx,ny)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    # calculation
+    if i<=nx && j<=ny
+        if h[i,j] > 0.0
+            U[i,j,1] = h[i,j]
+            U[i,j,2] = Qx[i,j]
+            U[i,j,3] = Qy[i,j]
 
-                F[i,j,1] = Qx[i,j]
-                F[i,j,2] = h[i,j]*(Qx[i,j]/h[i,j])^2+0.5*g*h[i,j]^2
-                F[i,j,3] = h[i,j]*(Qx[i,j]/h[i,j])*(Qy[i,j]/h[i,j])
+            F[i,j,1] = Qx[i,j]
+            F[i,j,2] = h[i,j]*(Qx[i,j]/h[i,j])^2+0.5*g*h[i,j]^2
+            F[i,j,3] = h[i,j]*(Qx[i,j]/h[i,j])*(Qy[i,j]/h[i,j])
 
-                G[j,i,1] = Qy[i,j]
-                G[j,i,2] = h[i,j]*(Qx[i,j]/h[i,j])*(Qy[i,j]/h[i,j])
-                G[j,i,3] = h[i,j]*(Qy[i,j]/h[i,j])^2+0.5*g*h[i,j]^2
-            end
+            G[j,i,1] = Qy[i,j]
+            G[j,i,2] = h[i,j]*(Qx[i,j]/h[i,j])*(Qy[i,j]/h[i,j])
+            G[j,i,3] = h[i,j]*(Qy[i,j]/h[i,j])^2+0.5*g*h[i,j]^2
         end
     end
-    return U,F,G
+    return nothing
 end
 @views function getU(h,Qx,Qy,nx,ny)
     U = zeros(Float64,nx,ny,3)
