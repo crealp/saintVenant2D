@@ -9,21 +9,9 @@ using Plots, LaTeXStrings, Base.Threads, ProgressMeter, CSV, DataFrames, CUDA
     Δx = 1.0/(8.0*Δx)
     Δy = 1.0/(8.0*Δy)
     if i>1 && i<=(nx-1) && j>1 && j<=(ny-1)
-        A   = z[i-1,j-1]
-        B   = z[i-1,j  ]
-        C   = z[i-1,j+1]
-        D   = z[i  ,j-1]
-        F   = z[i  ,j+1]
-        G   = z[i+1,j-1]
-        H   = z[i+1,j  ]
-        I   = z[i+1,j+1]
-
-        ∂zx = ((C+2.0*F+I)-(A+2.0*D+G))*Δx
-        ∂zy = ((G+2.0*H+I)-(A+2.0*B+C))*Δy
-        #= TO BE TESTED
         ∂zx = ((z[i-1,j+1]+2.0*z[i  ,j+1]+z[i+1,j+1])-(z[i-1,j-1]+2.0*z[i  ,j-1]+z[i+1,j-1]))*Δx
         ∂zy = ((z[i+1,j-1]+2.0*z[i+1,j  ]+z[i+1,j+1])-(z[i-1,j-1]+2.0*z[i-1,j  ]+z[i-1,j+1]))*Δy
-        =#
+
         s   = atand(sqrt(∂zx^2+∂zy^2))
         a   = atand(∂zy,-∂zx)
         
@@ -144,6 +132,9 @@ end
         @time hs=hillshade(z,dx,dy,45.0,315.0,nx,ny)
     end
     hs = Array(hs_D)
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        hillshade_plot(xc,yc,Array(hs_D),45.0,315.0,0.75)
+    savefig("./docs/py_vs_ju/julia_hillshade_GPU.png")
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         hillshade_plot(xc,yc,hs,45.0,315.0,0.75)
     savefig("./docs/py_vs_ju/julia_hillshade.png")
