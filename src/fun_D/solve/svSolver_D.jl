@@ -57,8 +57,8 @@ include("../bc/getBCs.jl")
     @info "Figs saved in" path_plot
 
     # define grid & block sizes for kernel initialization
-    BLOCKx    = 4
-    BLOCKy    = 8
+    BLOCKx    = 32
+    BLOCKy    = 16
     GRIDx     = ceil(Int,(nx+2)/BLOCKx)
     GRIDy     = ceil(Int,(ny+2)/BLOCKy)
     cuthreads = (BLOCKx, BLOCKy, 1)

@@ -13,6 +13,13 @@ include("../upd/update.jl")
     synchronize()
     @cuda blocks=cublocks threads=cuthreads getBCs_D(zbc_D,z_D,nx,ny,1,4)
     synchronize()
+    UFS = CUDA.zeros(Float64,nx+1,ny,3,6)
+    # (:,:,:,1) UL
+    # (:,:,:,2) UR
+    # (:,:,:,3) FL
+    # (:,:,:,4) FR
+    # (:,:,:,5) SL
+    # (:,:,:,6) SR
     UL = CUDA.zeros(Float64,nx+1,ny,3)
     UR = CUDA.zeros(Float64,nx+1,ny,3)
     FL = CUDA.zeros(Float64,nx+1,ny,3)
