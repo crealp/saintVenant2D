@@ -73,12 +73,16 @@ include("../bc/getBCs.jl")
 
     copyto!(Qy_D,Qy)
     U         = zeros(Float64,nx,ny,3)
-    F         = zeros(Float64,nx,ny,3)
-    G         = zeros(Float64,nx,ny,3)
     U_D       = CUDA.zeros(Float64,nx,ny,3)
     Ubc_D     = CUDA.zeros(Float64,nx+2,ny,3)
-    F_D       = CUDA.zeros(Float64,nx,ny,3)
-    G_D       = CUDA.zeros(Float64,nx,ny,3)
+    UFS_D     = CUDA.zeros(Float64,nx+1,ny+1,3,7)
+    # (:,:,:,1) UL
+    # (:,:,:,2) UR
+    # (:,:,:,3) FL
+    # (:,:,:,4) FR
+    # (:,:,:,5) SL
+    # (:,:,:,6) SR
+    # (:,:,:,7) F
     z_D       = CUDA.zeros(Float64,nx,ny)
     zbc_D     = CUDA.zeros(Float64,nx+2,ny)
     copyto!(z_D,z)
@@ -89,9 +93,6 @@ include("../bc/getBCs.jl")
 
         
 
-    # set & get vectors
-    CUDA.@time @cuda blocks=cublocks threads=cuthreads getUF_D(U_D,F_D,G_D,h_D,Qx_D,Qy_D,g,nx,ny)
-    synchronize()
     # set time
     t     = 0.0
     # plot & time stepping parameters
@@ -111,7 +112,7 @@ include("../bc/getBCs.jl")
         Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
         #Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
         # advection step solution
-        advSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,Ubc_D,U_D,zbc_D,z_D,g,Δx,Δy,Δt,nx,ny,solv_type)
+        advSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,UFS_D,Ubc_D,U_D,zbc_D,z_D,g,Δx,Δy,Δt,nx,ny,solv_type)
         # source step solution
         souSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,z_D,U_D,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
         # update current time
