@@ -23,6 +23,7 @@ include("../hillshade.jl")
 include("advSolve.jl")
 include("souSolve.jl")
 include("get.jl")
+include("../bc/getBCs.jl")
 
 @views function svSolver_D(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
     solv_type  = Dsim.solv_type
@@ -58,8 +59,8 @@ include("get.jl")
     # define grid & block sizes for kernel initialization
     BLOCKx    = 4
     BLOCKy    = 8
-    GRIDx     = ceil(Int,nx/BLOCKx)
-    GRIDy     = ceil(Int,ny/BLOCKy)
+    GRIDx     = ceil(Int,(nx+2)/BLOCKx)
+    GRIDy     = ceil(Int,(ny+2)/BLOCKy)
     cuthreads = (BLOCKx, BLOCKy, 1)
     cublocks  = (GRIDx,  GRIDy,  1)
     @info "GPU kernel:" cuthreads,cublocks nx,ny
@@ -69,16 +70,24 @@ include("get.jl")
     Qx_D      = CUDA.zeros(Float64,nx,ny)
     copyto!(Qx_D,Qx)
     Qy_D      = CUDA.zeros(Float64,nx,ny)
+
     copyto!(Qy_D,Qy)
+    U         = zeros(Float64,nx,ny,3)
+    F         = zeros(Float64,nx,ny,3)
+    G         = zeros(Float64,nx,ny,3)
     U_D       = CUDA.zeros(Float64,nx,ny,3)
+    Ubc_D     = CUDA.zeros(Float64,nx+2,ny,3)
     F_D       = CUDA.zeros(Float64,nx,ny,3)
     G_D       = CUDA.zeros(Float64,nx,ny,3)
     z_D       = CUDA.zeros(Float64,nx,ny)
+    zbc_D     = CUDA.zeros(Float64,nx+2,ny)
     copyto!(z_D,z)
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         temp = Array(h_D)
         h_plot(xc,yc,temp,maximum(temp),nx,ny,0.0,flow_type)
     savefig(path_plot*"plot_h_init_GPU.png")
+
+        
 
     # set & get vectors
     CUDA.@time @cuda blocks=cublocks threads=cuthreads getUF_D(U_D,F_D,G_D,h_D,Qx_D,Qy_D,g,nx,ny)
@@ -95,15 +104,16 @@ include("get.jl")
     end
     # action
     println("[=> action!")
-    #=
+
     prog  = ProgressUnknown("working hard:", spinner=true,showspeed=true)
     while t<T
     	# adaptative Δt
-        Δt  = getΔt(h,Qx,Qy,g,Δx,Δy,CFL,nx,ny)
+        Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
+        #Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
         # advection step solution
-        h,Qx,Qy = advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,solv_type)
+        advSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,Ubc_D,U_D,zbc_D,z_D,g,Δx,Δy,Δt,nx,ny,solv_type)
         # source step solution
-        h,Qx,Qy = souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
+        souSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,z_D,U_D,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
         # update current time
         t  += Δt
         it += 1
@@ -114,7 +124,7 @@ include("get.jl")
                     #fig=free_surface_plot(xc,yc,h,z,η0,0.25*(maximum(h.+z)-η0),nx,ny,t)
                     #fig=discharge_plot(xc,yc,h,Qx,Qy,z,2.5,nx,ny,t)
                     #fig=profile_plot(xc,yc,h,z,zmin,10.0,nx,ny,t)
-                    fig=h_plot(xc,yc,h,0.5,nx,ny,t,flow_type)
+                    fig=h_plot(xc,yc,Array(h_D),0.5,nx,ny,t,flow_type)
                     if make_gif==true
                         frame(anim,fig)
                     end
@@ -122,7 +132,7 @@ include("get.jl")
         next!(prog;showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✗) t/T",round(t/T,digits=2))])
     end
     ProgressMeter.finish!(prog, spinner = '✓',showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✓) t/T",1.0)])
-    =#
+        #==#
     println("[=> generating final plots, exporting & exiting...")
     if make_gif==true
         gif(anim,path_plot*solv_type*".gif")

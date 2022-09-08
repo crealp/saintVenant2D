@@ -1,12 +1,15 @@
 include("../upd/update.jl")
-@views function τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+@views function τ_coulomb(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+
     ρs = 2.7e3          # solid density
     ϕb = 35.0*pi/180    # internal friction angle
     μ0 = tan(ϕb)        # static friction coefficient
     μw = tan(0.5*ϕb)    # dynamic friction coefficient
     W  = 1.0e6          # velocity threshold
-    for j ∈ 1:ny
-        for i ∈ 1:nx
+    if i<=nx && j<=ny
             if h[i,j]>0.0
                 u  = Qx[i,j]/(h[i,j])   # x-component velocity
                 v  = Qy[i,j]/(h[i,j])   # y-component velocity
@@ -38,94 +41,20 @@ include("../upd/update.jl")
                 S[i,j,2] = -τx/ρs
                 S[i,j,3] = -τy/ρs                   
             end
-        end
-    end
-    return S
-end
-@views function τ_newtonian(h,Qx,Qy,g,nx,ny)
-    n  = 0.00025
-    ρw = 1.0e3
-    S  = zeros(Float64,nx,ny,3)
-    for j ∈ 1:ny
-        for i ∈ 1:nx
-            if h[i,j]>0.0
-                u  = Qx[i,j]/(h[i,j])
-                v  = Qy[i,j]/(h[i,j])
-                w  = sqrt(u^2+v^2)
-                if w>0.0
-                        Cf = n^2*(h[i,j])^(-4/3)
-                        τ  = g*Cf*w
-                else 
-                        τ  = 0.0
-                end
-                S[i,j,1] = 0.0
-                S[i,j,2] = τ
-                S[i,j,3] = τ
-            end
-        end
-    end
-    return S
-end
-@views function τ_plastic(h,Qx,Qy,g,nx,ny)
-    ρs = 2.7e3
-    ϕb = 15.0*pi/180
-    μ  = tan(ϕb)
-    η  = 1.0e3
-    m  = 3.0/2.0
-    S  = zeros(Float64,nx,ny,3)
-    for j ∈ 1:ny
-        for i ∈ 1:nx
-            if h[i,j]>0.0
-                u  = Qx[i,j]/(h[i,j])
-                v  = Qy[i,j]/(h[i,j])
-                w  = sqrt(u^2+v^2)
-                u  = Qx[i,j]/(h[i,j])
-                v  = Qy[i,j]/(h[i,j])
-                w  = sqrt(u^2+v^2)
-
-                τf = ρs*g*h[i,j]*tan(ϕb)
-                
-
-                τηx = ((2.0*m+1.0)/m)^m*η*(abs(u)/h[i,j])^m
-                τηy = ((2.0*m+1.0)/m)^m*η*(abs(v)/h[i,j])^m
-
-
-                S[i,j,1] = 0.0
-                S[i,j,2] = (τf+τηx)/ρs
-                S[i,j,3] = (τf+τηy)/ρs
-            end
-        end
-    end
-    return S
-end
-@views function precip!(S,ϵp,t,nx,ny)
-    A = (2.0*rand(Float64)-1.0)
-    f = 1.0
-    r = A*sin(2*pi*5.0*t)
-    p = 0.0
-
-    for j ∈ 1:ny
-        for i ∈ 1:nx
-            S[i,j,1] = ϵp
-        end
     end
     return nothing
 end
-@views function souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
-    S  = zeros(Float64,nx,ny,3)
-    if flow_type=="coulomb"
-        τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
-    elseif flow_type=="newtonian"
-        S = τ_newtonian(h,Qx,Qy,g,nx,ny)
-    elseif flow_type=="plastic"
-        S = τ_plastic(h,Qx,Qy,g,nx,ny)
-    end
-    # add precipitation if pcpt_onoff==true
-    if pcpt_onoff==true
-        precip!(S,8.0e-6,t,nx,ny)
-    end
+
+@views function souSolve_D(cublocks,cuthreads,h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
+    S  = CUDA.zeros(Float64,nx,ny,3)
+    @cuda blocks=cublocks threads=cuthreads τ_coulomb(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+    synchronize()
     # assembly of conservative variables vector and flux function vector
-    getU!(U,h,Qx,Qy,nx,ny)
-    updateAdvU!(U,S,Δt,nx,ny,3,flow_type)
-    return copy(U[:,:,1]),copy(U[:,:,2]),copy(U[:,:,3])
+    @cuda blocks=cublocks threads=cuthreads getU_D(U,h,Qx,Qy,nx,ny)
+    synchronize()
+    @cuda blocks=cublocks threads=cuthreads updateAdvU_D(U,S,Δt,nx,ny)
+    synchronize()
+    @cuda blocks=cublocks threads=cuthreads getQxQyh_D(h,Qx,Qy,U,g,nx,ny)
+    synchronize()
+    return nothing
 end

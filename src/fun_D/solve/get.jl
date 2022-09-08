@@ -1,3 +1,15 @@
+@views function getQxQyh_D(h,Qx,Qy,U,g,nx,ny)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    # calculation
+    if i<=nx && j<=ny
+        h[i,j] = U[i,j,1] 
+        Qx[i,j]= U[i,j,2]
+        Qy[i,j]= U[i,j,3]
+    end
+    return nothing
+end
 @views function getUF_D(U,F,G,h,Qx,Qy,g,nx,ny)
     # index initialization
     i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
@@ -20,6 +32,21 @@
     end
     return nothing
 end
+@views function getU_D(U,h,Qx,Qy,nx,ny)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    # calculation
+    if i<=nx && j<=ny
+        if h[i,j] > 0.0
+            U[i,j,1] = h[i,j]
+            U[i,j,2] = Qx[i,j]
+            U[i,j,3] = Qy[i,j]
+        end
+    end
+    return nothing
+end
+
 @views function getU(h,Qx,Qy,nx,ny)
     U = zeros(Float64,nx,ny,3)
     for j ∈ 1:ny
