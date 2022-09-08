@@ -7,7 +7,7 @@ include("../upd/update.jl")
         getU!(U,h,Qx,Qy,nx,ny)
     # ghost cells
         #2) periodic in x
-        Ubc = getBCs(U,nx,ny,3,"reflective")
+        Ubc = getBCs(U,nx,ny,3,"outflow")
         zbc = getBCs(z,nx,ny,1,"dirichlet")          
     # find inter-cell fluxes (e.g., HLL-type fluxes or the Rusanov fluxes)
         fluxes!(F,Ubc,zbc,g,Δx,Δt,type,nx,ny,"x")
@@ -15,7 +15,7 @@ include("../upd/update.jl")
         updateU!(U,F,(Δt/Δx),nx,ny,3)
     # ghost cells    
         #2) periodic in y
-        Ubc = getBCs(permutedims(U,(2,1,3)),ny,nx,3,"reflective")
+        Ubc = getBCs(permutedims(U,(2,1,3)),ny,nx,3,"outflow")
         zbc = getBCs(permutedims(z,(2,1)  ),ny,nx,1,"dirichlet")
     # find inter-cell fluxes (e.g., HLL-type fluxes or the Rusanov fluxes)
         fluxes!(G,Ubc,zbc,g,Δy,Δt,type,ny,nx,"y")

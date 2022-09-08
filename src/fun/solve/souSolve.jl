@@ -86,12 +86,13 @@ end
                 τf = ρs*g*h[i,j]*tan(ϕb)
                 
 
-                τη = ((2.0*m+1.0)/m)^m*η*(w/h[i,j])^m
+                τηx = ((2.0*m+1.0)/m)^m*η*(abs(u)/h[i,j])^m
+                τηy = ((2.0*m+1.0)/m)^m*η*(abs(v)/h[i,j])^m
 
 
                 S[i,j,1] = 0.0
-                S[i,j,2] = (τf+τη)/ρs
-                S[i,j,3] = (τf+τη)/ρs
+                S[i,j,2] = (τf+τηx)/ρs
+                S[i,j,3] = (τf+τηy)/ρs
             end
         end
     end
@@ -105,12 +106,10 @@ end
 
     for j ∈ 1:ny
         for i ∈ 1:nx
-            if r>0.0 && t<3600.0
-                p=r*ϵp
-                S[i,j,1] = p
-            end
+            S[i,j,1] = ϵp
         end
     end
+    return nothing
 end
 @views function souSolve(h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
     S  = zeros(Float64,nx,ny,3)
@@ -121,10 +120,9 @@ end
     elseif flow_type=="plastic"
         S = τ_plastic(h,Qx,Qy,g,nx,ny)
     end
-
+    # add precipitation if pcpt_onoff==true
     if pcpt_onoff==true
-        #precip!(S,1.0e-3/3600.0,t,nx,ny)
-        precip!(S,1.0e-3,t,nx,ny)
+        precip!(S,8.0e-6,t,nx,ny)
     end
     # assembly of conservative variables vector and flux function vector
     getU!(U,h,Qx,Qy,nx,ny)

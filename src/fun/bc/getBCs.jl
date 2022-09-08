@@ -20,9 +20,9 @@
             for j ∈ 1:ny
                 for i ∈ 1:nx+2
                     if i == 1
-                        Abc[1   ,j,dim] = 1.0*A[1   ,j,dim]
+                        Abc[1   ,j,dim] = A[1   ,j,dim]
                     elseif i == nx+2
-                        Abc[nx+2,j,dim] = 1.0*A[nx,j,dim]
+                        Abc[nx+2,j,dim] = A[nx,j,dim]
                     else
                         Abc[i   ,j,dim] = A[i-1 ,j,dim]
                     end
@@ -47,6 +47,24 @@
                     end
                 end
             end
+    elseif type == "outflow"
+        for j ∈ 1:ny
+            for i ∈ 1:nx+2
+                if i == 1
+                    Abc[1   ,j,1] = 0.0
+                    Abc[1   ,j,2] = 0.0
+                    Abc[1   ,j,3] = 0.0
+                elseif i == nx+2
+                    Abc[nx+2,j,1] = 0.0
+                    Abc[nx+2,j,2] = 0.0
+                    Abc[nx+2,j,3] = 0.0
+                else
+                    Abc[i   ,j,1] =  A[i-1 ,j,1]
+                    Abc[i   ,j,2] =  A[i-1 ,j,2]
+                    Abc[i   ,j,3] =  A[i-1 ,j,3]
+                end
+            end
+        end
     end
     return Abc
 end

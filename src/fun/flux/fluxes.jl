@@ -52,4 +52,5 @@ include("LxF.jl")
         exit(-1)
     end
     F.=(f[2:nx+1,:,:].+sr[2:nx+1,:,:]).-(f[1:nx+0,:,:].+sl[1:nx+0,:,:])
+    return nothing
 end
