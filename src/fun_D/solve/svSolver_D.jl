@@ -18,8 +18,9 @@ if isdir(path_save)==false
 end
 
 # include dependencies & function call(s) for svSolver.jl
-include("../plots.jl")
-include("../hillshade.jl")
+include("../../fun/plots.jl")
+include("../../fun/hillshade.jl")
+using CUDA
 include("advSolve.jl")
 include("souSolve.jl")
 include("get.jl")
