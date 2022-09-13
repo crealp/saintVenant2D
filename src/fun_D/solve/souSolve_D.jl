@@ -1,4 +1,4 @@
-include("../upd/update.jl")
+include("../upd/update_D.jl")
 @views function τ_coulomb(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     # index initialization
     i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
@@ -28,6 +28,37 @@ include("../upd/update.jl")
                 else 
                     αy = atan((z[i,j+1]-z[i,j-1])/(2.0*Δy))                            
                 end
+                if w>0.0
+                    μ  = (μ0-μw)/(1.0+w/W)+μw   # velocity-dependent friction model, see yamada etal, 2018
+                    τ  = ρs*g*h[i,j]*μ          # basal frictional/shear resistance law, see 
+                    τx = τ*cos(αx)*(u/w)        # x-component basal shear
+                    τy = τ*cos(αy)*(v/w)        # y-component basal shear
+                else 
+                    τx = 0.0
+                    τy = 0.0
+                end
+                S[i,j,1] = 0.0
+                S[i,j,2] = -τx/ρs
+                S[i,j,3] = -τy/ρs                   
+            end
+    end
+    return nothing
+end
+@views function τ_newtonian(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+
+    ρs = 2.7e3          # solid density
+    ϕb = 35.0*pi/180    # internal friction angle
+    μ0 = tan(ϕb)        # static friction coefficient
+    μw = tan(0.5*ϕb)    # dynamic friction coefficient
+    W  = 1.0e6          # velocity threshold
+    if i<=nx && j<=ny
+            if h[i,j]>0.0
+                u  = Qx[i,j]/(h[i,j])   # x-component velocity
+                v  = Qy[i,j]/(h[i,j])   # y-component velocity
+                w  = sqrt(u^2+v^2)      # magnitude L2 of the velocity
                 if w>0.0
                     μ  = (μ0-μw)/(1.0+w/W)+μw   # velocity-dependent friction model, see yamada etal, 2018
                     τ  = ρs*g*h[i,j]*μ          # basal frictional/shear resistance law, see 
