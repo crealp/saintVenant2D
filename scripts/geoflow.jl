@@ -12,7 +12,7 @@ include("../src/fun/solve/svSolver.jl")
     ly     = 20.0
     g      = 9.81
     # number of points
-    nx     = 400
+    nx     = 200
     ny     = Int64((ly/lx)*nx)
     Qx     = zeros(Float64,nx,ny)
     Qy     = zeros(Float64,nx,ny)
