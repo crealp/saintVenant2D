@@ -26,20 +26,22 @@ include("../src/fun_D/solve/svSolver_D.jl")
 
     xm  = [1750.0,2100.0]
     ym  = [750.0,1500.0]
-    xm  = [0.0,4000.0]
-    ym  = [0.0,4000.0]
+    xm  = [0.0,1000.0]
+    ym  = [0.0,1000.0]
     xf  = vcat(xm,reverse(xm))
     yf  = vcat(ym,reverse(ym))
 
     xId = findall(x->x>xm[1] && x<xm[2],xc)
     yId = findall(x->x>ym[1] && x<ym[2],yc)
 
-    #z0    = copy(z[xId,yId])
-    #xc0   = copy(xc[xId])
-    #yc0   = copy(yc[yId])
+    z0    = copy(z[xId,yId])
+    xc0   = copy(xc[xId])
+    yc0   = copy(yc[yId])
+    #==#
     z0    = copy(z)
     xc0   = copy(xc)
     yc0   = copy(yc)
+    
 
     Δx    = Δ
     Δy    = Δx

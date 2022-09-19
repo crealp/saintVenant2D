@@ -74,7 +74,7 @@ include("../bc/getBCs_D.jl")
     copyto!(Qy_D,Qy)
     U     = zeros(Float64,nx,ny,3)
     U_D   = CUDA.zeros(Float64,nx,ny,3)
-    Ubc_D = CUDA.zeros(Float64,nx+2,ny,3)
+    Ubc_D = CUDA.zeros(Float64,nx+2,ny+2,3)
     UFS_D = CUDA.zeros(Float64,nx+1,ny+1,3,7)
     # (:,:,:,1) UL
     # (:,:,:,2) UR
@@ -182,7 +182,7 @@ end
     copyto!(Qy_D,Qy)
     U     = zeros(Float64,nx,ny,3)
     U_D   = CUDA.zeros(Float64,nx,ny,3)
-    Ubc_D = CUDA.zeros(Float64,nx+2,ny,3)
+    Ubc_D = CUDA.zeros(Float64,nx+2,ny+2,3)
     UFS_D = CUDA.zeros(Float64,nx+1,ny+1,3,7)
     # (:,:,:,1) UL
     # (:,:,:,2) UR
@@ -192,7 +192,7 @@ end
     # (:,:,:,6) SR
     # (:,:,:,7) F
     z_D   = CUDA.zeros(Float64,nx,ny)
-    zbc_D = CUDA.zeros(Float64,nx+2,ny)
+    zbc_D = CUDA.zeros(Float64,nx+2,ny+2)
     copyto!(z_D,z)
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         temp = Array(h_D)
