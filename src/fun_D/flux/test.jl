@@ -1,5 +1,5 @@
 # Hydrostatic reconstruction for variable topography
-@views function fluxRus_D(UFS,U,z,g,nx,ny,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
+@views function test_D(UFS,U,z,g,nx,ny,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
     # index initialization
     i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
     j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
@@ -27,7 +27,6 @@
             UFS[i,j,2,5] = 0.5*g*(U[i+1,j,1]^2-hR^2)
             UFS[i,j,2,6] = 0.5*g*(U[i  ,j,1]^2-hL^2)
         end
-        # Rusanov flux definition
         if i<=nx+1 && j<=ny
             hL    = max(0.0,UFS[i,j,1,1])
             if hL>0.0
@@ -71,7 +70,6 @@
             UFS[i,j,3,5] = 0.5*g*(U[i+1,j,1]^2-hR^2)
             UFS[i,j,3,6] = 0.5*g*(U[i  ,j,1]^2-hL^2)
         end
-        # Rusanov flux definition
         if i<=nx+1 && j<=ny
             hL    = max(0.0,UFS[i,j,1,1])
             if hL>0.0

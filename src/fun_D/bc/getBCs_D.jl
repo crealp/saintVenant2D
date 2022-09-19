@@ -50,92 +50,57 @@
     return nothing
 end
 
-@views function getBCs(A,nx,ny,nD,type)
-    Abc = zeros(nx+2,ny,nD)
-    if type == "periodic"
-        for dim ∈ 1:nD
-            for j ∈ 1:ny
-                for i ∈ 1:nx+2
-                    if i == 1
-                        Abc[1   ,j,dim] = A[nx ,j,dim]
-                    elseif i == nx+2
-                        Abc[nx+2,j,dim] = A[1  ,j,dim]
-                    else
-                        Abc[i   ,j,dim] = A[i-1,j,dim]
-                    end
-                end
-            end
-        end
-    elseif type == "dirichlet"
-        for dim ∈ 1:nD
-            for j ∈ 1:ny
-                for i ∈ 1:nx+2
-                    if i == 1
-                        Abc[1   ,j,dim] = A[1   ,j,dim]
-                    elseif i == nx+2
-                        Abc[nx+2,j,dim] = A[nx,j,dim]
-                    else
-                        Abc[i   ,j,dim] = A[i-1 ,j,dim]
-                    end
-                end
-            end
-        end  
-    elseif type == "reflective"
-            for j ∈ 1:ny
-                for i ∈ 1:nx+2
-                    if i == 1
-                        Abc[1   ,j,1] =  A[1   ,j,1]
-                        Abc[1   ,j,2] = -A[1   ,j,2]
-                        Abc[1   ,j,3] = -A[1   ,j,3]
-                    elseif i == nx+2
-                        Abc[nx+2,j,1] =  A[nx,j,1]
-                        Abc[nx+2,j,2] = -A[nx,j,2]
-                        Abc[nx+2,j,3] = -A[nx,j,3]
-                    else
-                        Abc[i   ,j,1] =  A[i-1 ,j,1]
-                        Abc[i   ,j,2] =  A[i-1 ,j,2]
-                        Abc[i   ,j,3] =  A[i-1 ,j,3]
-                    end
-                end
-            end
-    elseif type == "outflow"
-        for j ∈ 1:ny
-            for i ∈ 1:nx+2
+@views function getBC_D(zbc,Ubc,z,U,nx,ny,direction)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    # calculation
+    if direction==1
+        for dim ∈ 1:3
+            #"outflow"
+            if i<=nx && j<=ny
                 if i == 1
-                    Abc[1   ,j,1] = 0.0
-                    Abc[1   ,j,2] = 0.0
-                    Abc[1   ,j,3] = 0.0
+                    Ubc[1   ,j,dim] = 0.0
                 elseif i == nx+2
-                    Abc[nx+2,j,1] = 0.0
-                    Abc[nx+2,j,2] = 0.0
-                    Abc[nx+2,j,3] = 0.0
+                    Ubc[nx+2,j,dim] = 0.0
                 else
-                    Abc[i   ,j,1] =  A[i-1 ,j,1]
-                    Abc[i   ,j,2] =  A[i-1 ,j,2]
-                    Abc[i   ,j,3] =  A[i-1 ,j,3]
+                    Ubc[i   ,j,dim] = U[i-1,j,dim]
                 end
-            end
+            end 
         end
-    end
-    return Abc
-end
-
-#=
-@views function getBCs(A,nx,ny,nD)
-    Abc = zeros(nx+2,ny,nD)
-    for dim in 1:nD
-        for j in 1:ny
-            for i in 1:nx+2
-                if i == 1
-                    Abc[i,j,dim] = 0.0*A[2 ,j,dim]
-                elseif i == nx+2
-                    Abc[i,j,dim] = 0.0*A[nx-1,j,dim]
+        #"dirichlet"
+        if i<=nx && j<=ny
+            if i == 1
+                zbc[1   ,j] = z[1  ,j]
+            elseif i == nx+2
+                zbc[nx+2,j] = z[nx ,j]
+            else
+                zbc[i   ,j] = z[i-1,j]
+            end
+        end 
+    elseif direction==2
+        for dim ∈ 1:3
+            #"outflow"
+            if i<=nx && j<=ny
+                if j == 1
+                    Ubc[i,1   ,dim] = 0.0
+                elseif j == ny+2
+                    Ubc[i,ny+2,dim] = 0.0
                 else
-                    Abc[i,j,dim] = A[i-1,j,dim]
+                    Ubc[i,j   ,dim] = U[i,j-1,dim]
                 end
-            end
+            end 
         end
+        #"dirichlet"
+        if i<=nx && j<=ny
+            if j == 1
+                zbc[i,1   ] = z[i,1  ]
+            elseif j == ny+2
+                zbc[i,ny+2] = z[i,ny ]
+            else
+                zbc[i   ,j] = z[i,j-1]
+            end
+        end 
     end
-    return Abc
+    return nothing
 end
-=#
