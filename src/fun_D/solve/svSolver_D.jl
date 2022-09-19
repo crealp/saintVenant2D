@@ -142,6 +142,7 @@ include("../bc/getBCs_D.jl")
     println("[=> done! exiting...")
     return nothing
 end
+
 @views function svSolverPerf_D(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
     solv_type  = Dsim.solv_type
     make_gif   = Dsim.make_gif
@@ -163,6 +164,7 @@ end
     CSV.write(path_save*"y.csv",savedData)
     savedData=DataFrame("z"=>vec(z),"hs"=>vec(hs))
     CSV.write(path_save*"zhs.csv",savedData)  
+
     # define grid & block sizes for kernel initialization
     BLOCKx    = 32
     BLOCKy    = 16
@@ -172,17 +174,16 @@ end
     cublocks  = (GRIDx,  GRIDy,  1)
     @info "GPU kernel:" cuthreads,cublocks nx,ny
     # allocate memory on GPU, i.e., variable on device specified by <nameOfVariable>_D
-    h_D       = CUDA.zeros(Float64,nx,ny)
+    h_D   = CUDA.zeros(Float64,nx,ny)
     copyto!(h_D,h)
-    Qx_D      = CUDA.zeros(Float64,nx,ny)
+    Qx_D  = CUDA.zeros(Float64,nx,ny)
     copyto!(Qx_D,Qx)
-    Qy_D      = CUDA.zeros(Float64,nx,ny)
-
+    Qy_D  = CUDA.zeros(Float64,nx,ny)
     copyto!(Qy_D,Qy)
-    U         = zeros(Float64,nx,ny,3)
-    U_D       = CUDA.zeros(Float64,nx,ny,3)
-    Ubc_D     = CUDA.zeros(Float64,nx+2,ny,3)
-    UFS_D     = CUDA.zeros(Float64,nx+1,ny+1,3,7)
+    U     = zeros(Float64,nx,ny,3)
+    U_D   = CUDA.zeros(Float64,nx,ny,3)
+    Ubc_D = CUDA.zeros(Float64,nx+2,ny,3)
+    UFS_D = CUDA.zeros(Float64,nx+1,ny+1,3,7)
     # (:,:,:,1) UL
     # (:,:,:,2) UR
     # (:,:,:,3) FL
@@ -190,9 +191,13 @@ end
     # (:,:,:,5) SL
     # (:,:,:,6) SR
     # (:,:,:,7) F
-    z_D       = CUDA.zeros(Float64,nx,ny)
-    zbc_D     = CUDA.zeros(Float64,nx+2,ny)
+    z_D   = CUDA.zeros(Float64,nx,ny)
+    zbc_D = CUDA.zeros(Float64,nx+2,ny)
     copyto!(z_D,z)
+    gr(size=(2*250,2*125),legend=true,markersize=2.5)
+        temp = Array(h_D)
+        h_plot(xc,yc,temp,maximum(temp),nx,ny,0.0,flow_type)
+    savefig(path_plot*"plot_h_init_GPU.png")
     # set time
     t     = 0.0
     # plot & time stepping parameters
@@ -202,14 +207,13 @@ end
     println("[=> action!")
     prog  = ProgressUnknown("working hard:", spinner=true,showspeed=true)
     while t<T
-        # adaptative Δt
+    	# adaptative Δt
         Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
         #Δt  = getΔt(Array(h_D),Array(Qx_D),Array(Qy_D),g,Δx,Δy,CFL,nx,ny)
         # advection step solution
         advSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,UFS_D,Ubc_D,U_D,zbc_D,z_D,g,Δx,Δy,Δt,nx,ny,solv_type)
         # source step solution
         souSolve_D(cublocks,cuthreads,h_D,Qx_D,Qy_D,z_D,U_D,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
-        # update current time
         # update current time
         t  += Δt
         it += 1
@@ -219,7 +223,6 @@ end
             savedData=DataFrame("t"=>t,"Δt"=>Δt,"it"=>it)
             CSV.write(path_save*"tdt_"*string(ctr)*".csv",savedData)
             ctr+=1
-
         end
         next!(prog;showvalues = [("[nx,ny]",(nx,ny)),("iteration(s)",it),("(✗) t/T",round(t/T,digits=2))])
     end

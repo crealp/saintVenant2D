@@ -13,14 +13,19 @@
     end
     return nothing
 end
-@views function updateAdvU_D(U,S,Δt,nx,ny)
+@views function updateAdvU_D(U,S,Δt,nx,ny,type)
     # index initialization
     i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
     j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
-    if i<=nx && j<=ny
+    if i<=nx && j<=ny && type==1
         U[i,j,1]+=Δt*S[i,j,1]
         U[i,j,2]+=Δt*S[i,j,2]
         U[i,j,3]+=Δt*S[i,j,3]
+    elseif i<=nx && j<=ny && type==2
+        U[i,j,1]+=Δt*S[i,j,1]
+        U[i,j,2]=U[i,j,2]/(1.0+Δt*S[i,j,2])
+        U[i,j,3]=U[i,j,3]/(1.0+Δt*S[i,j,3])
     end
+
     return nothing
 end
