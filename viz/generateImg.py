@@ -29,12 +29,8 @@ D    = np.genfromtxt('./dat/x.csv', delimiter=',')
 xc   = D[1:nx*ny+1]
 
 xc   = np.transpose(np.tile(D[1:nx*ny+1],(ny,1)))
-xc   = xc[0:2855,0:]
-print(xc.shape)
 D    = np.genfromtxt('./dat/y.csv', delimiter=',')
 yc   = np.tile(D[1:nx*ny+1],(nx,1))
-yc   = yc[0:,0:2362]
-print(yc.shape)
 
 print('')
 print('o---------------------------------------------o')
