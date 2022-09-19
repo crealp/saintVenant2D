@@ -84,7 +84,7 @@ include("../bc/getBCs_D.jl")
     # (:,:,:,6) SR
     # (:,:,:,7) F
     z_D   = CUDA.zeros(Float64,nx,ny)
-    zbc_D = CUDA.zeros(Float64,nx+2,ny)
+    zbc_D = CUDA.zeros(Float64,nx+2,ny+2)
     copyto!(z_D,z)
     gr(size=(2*250,2*125),legend=true,markersize=2.5)
         temp = Array(h_D)
