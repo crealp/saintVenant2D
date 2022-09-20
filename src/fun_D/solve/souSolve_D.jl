@@ -1,8 +1,8 @@
 include("../upd/update_D.jl")
-@views function τ_coulomb(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+@views function τCoulomb_D(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
 
     ρs = 2.7e3          # solid density
     ϕb = 35.0*pi/180    # internal friction angle
@@ -44,10 +44,10 @@ include("../upd/update_D.jl")
     end
     return nothing
 end
-@views function τ_newtonian(S,h,Qx,Qy,z,g,ϵp,nx,ny,Δx,Δy,pcpt_onoff)
+@views function τNewtonian_D(S,h,Qx,Qy,z,g,ϵp,nx,ny,Δx,Δy,pcpt_onoff)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
 
     n  = 0.00025
     ρw = 1.0e3
@@ -73,7 +73,7 @@ end
 @views function souSolve_D(cublocks,cuthreads,h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
     S  = CUDA.zeros(Float64,nx,ny,3)
     if flow_type=="coulomb"
-        @cuda blocks=cublocks threads=cuthreads τ_coulomb(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
+        @cuda blocks=cublocks threads=cuthreads τCoulomb_D(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
         synchronize()
         # assembly of conservative variables vector and flux function vector
         @cuda blocks=cublocks threads=cuthreads getU_D(U,h,Qx,Qy,nx,ny)
@@ -84,7 +84,7 @@ end
         synchronize()
     elseif flow_type=="newtonian"
         ϵp = 8.0e-6
-        @cuda blocks=cublocks threads=cuthreads τ_newtonian(S,h,Qx,Qy,z,g,ϵp,nx,ny,Δx,Δy,1)
+        @cuda blocks=cublocks threads=cuthreads τNewtonian_D(S,h,Qx,Qy,z,g,ϵp,nx,ny,Δx,Δy,1)
         synchronize()
         # assembly of conservative variables vector and flux function vector
         @cuda blocks=cublocks threads=cuthreads getU_D(U,h,Qx,Qy,nx,ny)

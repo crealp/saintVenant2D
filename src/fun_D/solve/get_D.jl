@@ -1,7 +1,7 @@
 @views function getQxQyh_D(h,Qx,Qy,U,g,nx,ny)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
     # calculation
     if i<=nx && j<=ny
         h[i,j] = U[i,j,1] 
@@ -12,8 +12,8 @@
 end
 @views function getUF_D(U,F,G,h,Qx,Qy,g,nx,ny)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
     # calculation
     if i<=nx && j<=ny
         if h[i,j] > 0.0
@@ -34,8 +34,8 @@ end
 end
 @views function getU_D(U,h,Qx,Qy,nx,ny)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
     # calculation
     if i<=nx && j<=ny
         if h[i,j] > 0.0
@@ -48,8 +48,8 @@ end
 end
 @views function setUFS_D(UFS,nx,ny)
     # index initialization
-    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
-    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    i = (blockIdx().x-1)*blockDim().x+threadIdx().x
+    j = (blockIdx().y-1)*blockDim().y+threadIdx().y
     # calculation
     if i<=nx && j<=ny
         k=1

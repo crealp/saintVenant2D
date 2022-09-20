@@ -25,7 +25,7 @@ end
                     if dim == 1
                         U[i,j,1]+=Δt*S[i,j,1]
                     else
-                        U[i,j,dim]=U[i,j,dim]/(1.0+Δt*S[i,j,dim])
+                        U[i,j,dim]/=(1.0+Δt*S[i,j,dim])
                     end
                 end
             end
