@@ -1,4 +1,4 @@
-@views function runoff()
+@views function runoff(path::String)
     Dsim   = param("HLLC",
                     false,
                     "newtonian",
@@ -7,7 +7,6 @@
     # physical constant
     g     = 9.81
     # number of points
-    path = "../dat/dtm_5m/dsm_sion.asc"
     d = Array(CSV.read(path,DataFrame,header=false; delim="\t", limit=6))
     x = Float64(d[3])
     y = Float64(d[4])
