@@ -1,9 +1,3 @@
-include("wellBal.jl")
-include("HLL.jl")
-include("HLLC.jl")
-include("Rus.jl")
-include("LxF.jl")
-# Numerical fluxes function
 @views function fluxes!(F,U,z,g,Δx,Δt,type,nx,ny,dim)
     # out 
     f  = zeros(Float64,nx+1,ny,3)

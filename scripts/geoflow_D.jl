@@ -1,7 +1,7 @@
 # include dependencies & function call(s)
-include("../src/fun/usingPackages.jl")
-include("../src/fun/misc.jl")
-include("../src/fun/geometry.jl")
+include("../src/fun_D/usingPackages.jl")
+include("../src/fun_D/misc.jl")
+include("../src/fun_D/geometry.jl")
 include("../src/fun_D/solve/svSolver_D.jl")
 
 @views function main()

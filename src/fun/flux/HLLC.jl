@@ -1,5 +1,5 @@
 # approximate HLLC Riemann solver, see Creed etal, 2016
-@views function sLsR(UL,UR,g,type)
+@views function sLsRsSvLvR(UL,UR,g,type)
     hL = max(0.0,UL[1])
     hR = max(0.0,UR[1])
     if hL>0.0 && hR>0.0
@@ -65,7 +65,7 @@
     return sL,sR,sS,vL,vR 
 end
 @views function fluxHLLC(fHLL,fstarL,fstarR,fstar,UL,UR,FL,FR,g,type,nD)
-    sL,sR,sS,vL,vR = sLsR(UL,UR,g,type)
+    sL,sR,sS,vL,vR = sLsRsSvLvR(UL,UR,g,type)
     fstar         .= (sR.*FL.-sL.*FR.+sL.*sR.*(UR.-UL))./(sR.-sL)
     if type == "F"
         fstarL[1]=fstar[1]

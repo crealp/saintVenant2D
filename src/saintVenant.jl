@@ -1,14 +1,22 @@
 module saintVenant
-export greet
-export geoflow,runoff,coast,basin
+export geoflow,runoff
 
-greet()   = print("Welcome in saintVenant module!")
-geoflow() = include("./scripts/geoflow.jl")
-runoff()  = include("./scripts/runoff.jl")
-coast()   = include("./scripts/coast.jl")
-basin()   = include("./scripts/basin.jl")
+
+# include dependencies & function call(s)
+include(joinpath("./fun", "superInclude.jl"))
+
+# include geoflow routine in saintVenant module
+@doc raw"""
+    geoflow(lx::Float64,ly::Float64,nx::Int64): solves a non-linear hyperbolic 2D Saint-Venant problem considering a Coulomb-type rheology within a finite volume framework on a Cartesian grid
+    # args:
+    - lx : dimension along the x-direciton.
+    - ly : dimension along the y-direciton.
+    - nx : number of grid nodes along the x-direction.
+"""
+geoflow()
+include(joinpath("../scripts", "geoflow.jl"))
+
+
+include(joinpath("../scripts", "runoff.jl"))
 
 end # module
-
-#geoflow() = main()
-#include(joinpath("../scripts", "geoflow.jl"))

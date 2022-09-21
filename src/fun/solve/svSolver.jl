@@ -1,30 +1,19 @@
-# global variable(s) & global declaration(s)
-plot_font = "Computer Modern"
-default(
-    fontfamily=plot_font,
-    linewidth=2,
-    framestyle=:box,
-    label=nothing,
-    grid=false
-    )
-ϵ    = 1.0e-10
-path_plot = "viz/out/"
-if isdir(path_plot)==false
-    mkdir(path_plot)    
-end
-path_save = "viz/dat/"
-if isdir(path_save)==false
-    mkdir(path_save)    
-end
-
-# include dependencies & function call(s) for svSolver.jl
-include("../plots.jl")
-include("../hillshade.jl")
-include("advSolve.jl")
-include("souSolve.jl")
-include("get.jl")
-
 @views function svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+    global path_plot = "viz/out/"
+        if isdir(path_plot)==false
+            mkdir(path_plot)    
+        end
+    global path_save = "viz/dat/"
+        if isdir(path_save)==false
+            mkdir(path_save)    
+        end
+    default(
+        fontfamily="Computer Modern",
+        linewidth=2,
+        framestyle=:box,
+        label=nothing,
+        grid=false
+        )
     solv_type  = Dsim.solv_type
     make_gif   = Dsim.make_gif
     flow_type  = Dsim.flow_type
@@ -107,6 +96,22 @@ include("get.jl")
     return nothing
 end
 @views function svSolverPerf(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+    global path_plot = "viz/out/"
+        if isdir(path_plot)==false
+            mkdir(path_plot)    
+        end
+    global path_save = "viz/dat/"
+        if isdir(path_save)==false
+            mkdir(path_save)    
+        end
+    default(
+        fontfamily="Computer Modern",
+        linewidth=2,
+        framestyle=:box,
+        label=nothing,
+        grid=false
+        )
+
     solv_type  = Dsim.solv_type
     make_gif   = Dsim.make_gif
     flow_type  = Dsim.flow_type

@@ -1,4 +1,3 @@
-include("../upd/update.jl")
 @views function τ_coulomb!(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     ρs = 2.7e3          # solid density
     ϕb = 35.0*pi/180    # internal friction angle

@@ -1,4 +1,3 @@
-
 @views function getBCs(A,nx,ny,nD,type)
     Abc = zeros(nx+2,ny,nD)
     if type == "periodic"
