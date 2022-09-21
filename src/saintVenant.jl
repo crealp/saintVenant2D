@@ -1,10 +1,11 @@
 module saintVenant
 export greet
-export geoflow,runoff
+export geoflow,runoff,coast,basin
 
 greet()   = print("Welcome in saintVenant module!")
 geoflow() = include("./scripts/geoflow.jl")
 runoff()  = include("./scripts/runoff.jl")
+coast()   = include("./scripts/coast.jl")
+basin()   = include("./scripts/basin.jl")
 
-println(greet())
 end # module
