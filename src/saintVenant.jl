@@ -2,6 +2,14 @@ module saintVenant
 export geoflow,runoff,coast,basin
 # include dependencies & function call(s)
 include(joinpath("./fun", "superInclude.jl"))
+global path_plot = "viz/out/"
+    if isdir(path_plot)==false
+        mkdir(path_plot)    
+    end
+global path_save = "viz/dat/"
+    if isdir(path_save)==false
+        mkdir(path_save)    
+    end
 # include geoflow routine in saintVenant module
 @doc raw"""
     geoflow(lx::Float64,ly::Float64,nx::Int64): solves a non-linear hyperbolic 2D Saint-Venant problem considering a Coulomb-type rheology within a finite volume framework on a Cartesian grid

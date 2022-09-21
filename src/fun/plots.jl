@@ -1,4 +1,11 @@
 @views function z_plot(xc,yc,z)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     heatmap(xc, yc, z',
         c=:terrain,
         clims=(-1.0,10.0),
@@ -11,6 +18,13 @@
     )
 end
 @views function z_plot!(xc,yc,z)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )    
     heatmap!(xc, yc, z',
         c=:roma,
         clims=(0.0,10.0),
@@ -23,6 +37,13 @@ end
     )
 end
 @views function h_plot(xc,yc,h,hmax,nx,ny,t,type)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     mask = ones(Float64,nx,ny)
         for j in 1:ny
             for i in 1:nx
@@ -80,6 +101,13 @@ end
     end
 end
 @views function wave_plot(xc,yc,h,z,η0,ηmax,nx,ny,t)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )    
     mask = ones(Float64,nx,ny)
         for j in 1:ny
             for i in 1:nx
@@ -103,6 +131,13 @@ end
     )
 end
 @views function free_surface_plot(xc,yc,h,z,η0,Δηmax,nx,ny,t)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     mask = ones(Float64,nx,ny)
         for j in 1:ny
             for i in 1:nx
@@ -126,6 +161,13 @@ end
     )
 end
 @views function discharge_plot(xc,yc,h,Qx,Qy,z,vmax,nx,ny,t)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     mask = ones(Float64,nx,ny)
         for j in 1:ny
             for i in 1:nx
@@ -151,6 +193,13 @@ end
         )
 end
 @views function profile_plot(xc,yc,h,z,zmin,η0,nx,ny,t)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     lx,ly = size(h)
     η = (h.+z)
     id = ceil(Int64,lx/2)
@@ -169,6 +218,13 @@ end
     )
 end
 @views function hillshade_plot(xc,yc,hs,ϕ,θ,α)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     heatmap(xc, yc, hs',
         alpha=α,
         c=:grayC,
@@ -184,6 +240,13 @@ end
 end
 
 @views function viz(make_gif)
+default(
+    fontfamily="Computer Modern",
+    linewidth=2,
+    framestyle=:box,
+    label=nothing,
+    grid=false
+    )
     p = CSV.read(path*"parameters.csv",DataFrame,header=1; delim=",")
     p = Array(p)
     nx= Int64(p[1])
