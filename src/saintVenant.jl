@@ -1,5 +1,5 @@
 module saintVenant
-export geoflow,runoff
+export geoflow,runoff,coast,basin
 
 
 # include dependencies & function call(s)
@@ -18,5 +18,7 @@ include(joinpath("../scripts", "geoflow.jl"))
 
 
 include(joinpath("../scripts", "runoff.jl"))
+include(joinpath("../scripts", "coast.jl"))
+include(joinpath("../scripts", "basin.jl"))
 
 end # module
