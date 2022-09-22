@@ -1,8 +1,3 @@
-# include dependencies & function call(s)
-include("get_D.jl")
-include("../bc/getBCs_D.jl")
-include("../flux/fluxes_D.jl")
-include("../upd/update_D.jl")
 @views function advSolve_D(cublocks,cuthreads,h,Qx,Qy,UFS,Ubc,U,zbc,z,g,Δx,Δy,Δt,nx,ny,type)
     # x-direction, F flux vector
     # assembly of conservative variables vector and flux function vector

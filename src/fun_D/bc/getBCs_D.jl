@@ -49,7 +49,6 @@
     end
     return nothing
 end
-
 @views function getBC_D(zbc,Ubc,z,U,nx,ny,direction)
     # index initialization
     i = (blockIdx().x-1)*blockDim().x+threadIdx().x

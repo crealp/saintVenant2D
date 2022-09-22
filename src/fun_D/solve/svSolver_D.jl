@@ -1,31 +1,3 @@
-# global variable(s) & global declaration(s)
-plot_font = "Computer Modern"
-default(
-    fontfamily=plot_font,
-    linewidth=2,
-    framestyle=:box,
-    label=nothing,
-    grid=false
-    )
-ϵ    = 1.0e-10
-path_plot = "viz/out/"
-if isdir(path_plot)==false
-    mkdir(path_plot)    
-end
-path_save = "viz/dat/"
-if isdir(path_save)==false
-    mkdir(path_save)    
-end
-
-# include dependencies & function call(s) for svSolver.jl
-include("../../fun/plots.jl")
-include("../../fun/hillshade.jl")
-using CUDA
-include("advSolve_D.jl")
-include("souSolve_D.jl")
-include("get_D.jl")
-include("../bc/getBCs_D.jl")
-
 @views function svSolver_D(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
     solv_type  = Dsim.solv_type
     make_gif   = Dsim.make_gif
@@ -142,7 +114,6 @@ include("../bc/getBCs_D.jl")
     println("[=> done! exiting...")
     return nothing
 end
-
 @views function svSolverPerf_D(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
     solv_type  = Dsim.solv_type
     make_gif   = Dsim.make_gif

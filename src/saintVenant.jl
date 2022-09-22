@@ -1,7 +1,9 @@
 module saintVenant
 export geoflow,runoff,coast,basin
+export geoflow_D
 # include dependencies & function call(s)
-include(joinpath("./fun", "superInclude.jl"))
+include(joinpath("./fun"  , "superInclude.jl"  )) # standard dependencies
+include(joinpath("./fun_D", "superInclude_D.jl")) # additional dependencies for Device & GPU computing
 global path_plot = "viz/out/"
     if isdir(path_plot)==false
         mkdir(path_plot)    
@@ -20,6 +22,7 @@ global path_save = "viz/dat/"
     - nx       : number of grid nodes along the x-direction.
     - rheoType : select the rheology, i.e., "coulomb", "newtonian" or "plastic"
     - solveType: select the numerical flux, i.e., "Rusanov", "HLL" or "HLLC"
+    To run geoflow() on a GPU, add _D, i.e., geoflow_D(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String)
 """
 geoflow()
 include(joinpath("../scripts", "geoflow.jl"))

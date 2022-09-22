@@ -1,4 +1,3 @@
-include("../upd/update_D.jl")
 @views function τCoulomb_D(S,h,Qx,Qy,z,g,nx,ny,Δx,Δy)
     # index initialization
     i = (blockIdx().x-1)*blockDim().x+threadIdx().x
@@ -69,7 +68,6 @@ end
     end
     return nothing
 end
-
 @views function souSolve_D(cublocks,cuthreads,h,Qx,Qy,z,U,g,Δx,Δy,t,Δt,nx,ny,flow_type,pcpt_onoff)
     S  = CUDA.zeros(Float64,nx,ny,3)
     if flow_type=="coulomb"
