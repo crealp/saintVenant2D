@@ -10,6 +10,7 @@ global path_save = "viz/dat/"
     if isdir(path_save)==false
         mkdir(path_save)    
     end
+@info path_plot*" and "*path_save*" path generated..."    
 # include geoflow routine in saintVenant module
 @doc raw"""
     geoflow(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String): solves a non-linear hyperbolic 2D Saint-Venant problem considering a Coulomb-type rheology within a finite volume framework on a Cartesian grid
@@ -22,12 +23,16 @@ global path_save = "viz/dat/"
 """
 geoflow()
 include(joinpath("../scripts", "geoflow.jl"))
+@info "(✓) geoflow()"
 # include runoff routine in saintVenant module
 include(joinpath("../scripts", "runoff.jl"))
+@info "(✓) runoff()"
 # include coast routine in saintVenant module
 include(joinpath("../scripts", "coast.jl"))
+@info "(✓) coast()"
 # include basin routine in saintVenant module
 include(joinpath("../scripts", "basin.jl"))
+@info "(✓) basin()"
 end
 
 #=
