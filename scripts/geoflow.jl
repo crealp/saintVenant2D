@@ -1,6 +1,6 @@
-@views function geoflow(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String)
+@views function geoflow(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String,isGif::Bool)
     # Dsim definition
-    Dsim   = param(solvType,false,rheoType,false)
+    Dsim   = param(solvType,isGif,rheoType,false)
     #Dsim   = param("HLLC",false,"newtonian",false)
     # physical constant
     g      = 9.81
@@ -17,8 +17,8 @@
     tC     = 1.0/25.0
     svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
-@views function geoflow_D(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String)
-    Dsim   = param(solvType,false,rheoType,false)
+@views function geoflow_D(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String,isGif::Bool)
+    Dsim   = param(solvType,isGif,rheoType,false)
     #Dsim   = param("HLLC",false,"newtonian",false)
     # physical constant
     g      = 9.81

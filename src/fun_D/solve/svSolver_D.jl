@@ -104,9 +104,9 @@
         #==#
     println("[=> generating final plots, exporting & exiting...")
     if make_gif==true
-        gif(anim,path_plot*solv_type*".gif")
+        gif(anim,path_plot*"h_"*solv_type*"_D.gif")
     end
-    savefig(path_plot*solv_type*"_plot.png")
+    savefig(path_plot*solv_type*"_D_plot.png")
 
     free_surface_plot(xc,yc,h,z,η0,0.3*(maximum(h.+z)-η0),nx,ny,t)
     savefig(path_plot*solv_type*"_freesurface.png")
