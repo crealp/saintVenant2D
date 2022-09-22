@@ -35,15 +35,16 @@ export geoflow_D,runoff_D # device code
         On Windows OS, use "/" instead of "\"
     """
     runoff()
-    @info "(✓) geoflow()\n\t    geoflow_D()"
     include(joinpath("../scripts", "runoff.jl"))
-    @info "(✓) runoff()\n\t    runoff_D()"
 # include coast routine in saintVenant module
     include(joinpath("../scripts", "coast.jl"))
-    @info "(✓) coast()"
 # include basin routine in saintVenant module
     include(joinpath("../scripts", "basin.jl"))
-    @info "(✓) basin()"
+    t = ["(✓) geoflow()\n\t    geoflow_D()\n\t",
+         "(✓) runoff() \n\t    runoff_D() \n\t", 
+         "(✓) coast()  \n\t",
+         "(✓) basin()"]       
+    @info t[1]*t[2]*t[3]*t[4]
 end
 
 #=
