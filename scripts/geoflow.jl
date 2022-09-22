@@ -1,6 +1,6 @@
-@views function geoflow(lx::Float64,ly::Float64,nx::Int64)
+@views function geoflow(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String)
     # Dsim definition
-    Dsim   = param("HLLC",false,"coulomb",false)
+    Dsim   = param(solvType,false,rheoType,false)
     #Dsim   = param("HLLC",false,"newtonian",false)
     # physical constant
     g      = 9.81
