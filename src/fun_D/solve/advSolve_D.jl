@@ -6,7 +6,16 @@
     # ghost cells
         @cuda blocks=cublocks threads=cuthreads getBC_D(zbc,Ubc,z,U,nx,ny,1)
     # get fluxes x-direction
-        @cuda blocks=cublocks threads=cuthreads fluxRus_D(UFS,Ubc,zbc,g,nx,ny,1) 
+        if type=="Rus"
+            @cuda blocks=cublocks threads=cuthreads fluxRus_D(UFS,Ubc,zbc,g,nx,ny,1)
+        elseif type=="HLL"
+            @cuda blocks=cublocks threads=cuthreads fluxHLL_D(UFS,Ubc,zbc,g,nx,ny,1)
+        elseif type=="HLLC"
+    
+        else 
+            @error "invalid flux definition, valid definitions are:\n\ta) Rus  - Rusanov fluxes\n\tb) HLL  - HLL approximate Riemann solver\n\tc) HLLC - HLLC  approximate Riemann solver"
+            exit(-1)
+        end
     # update along x-direction
         @cuda blocks=cublocks threads=cuthreads updateU_D(U,UFS,(Δt/Δx),nx,ny,1)
     synchronize()
@@ -16,7 +25,16 @@
         @cuda blocks=cublocks threads=cuthreads setUFS_D(UFS,nx+1,ny+1)
         @cuda blocks=cublocks threads=cuthreads getBC_D(zbc,Ubc,z,U,nx,ny,2)
     # get fluxes y-direction
-        @cuda blocks=cublocks threads=cuthreads fluxRus_D(UFS,Ubc,zbc,g,nx,ny,2) 
+    if type=="Rus"
+        @cuda blocks=cublocks threads=cuthreads fluxRus_D(UFS,Ubc,zbc,g,nx,ny,2)
+    elseif type=="HLL"
+        @cuda blocks=cublocks threads=cuthreads fluxHLL_D(UFS,Ubc,zbc,g,nx,ny,2)
+    elseif type=="HLLC"
+
+    else 
+        @error "invalid flux definition, valid definitions are:\n\ta) Rus  - Rusanov fluxes\n\tb) HLL  - HLL approximate Riemann solver\n\tc) HLLC - HLLC  approximate Riemann solver"
+        exit(-1)
+    end
     # update along y-direction
         @cuda blocks=cublocks threads=cuthreads updateU_D(U,UFS,(Δt/Δy),nx,ny,2)
         @cuda blocks=cublocks threads=cuthreads getQxQyh_D(h,Qx,Qy,U,g,nx,ny)
