@@ -184,10 +184,14 @@ git clone https://github.com/ewyser/saintVenant
   [91a5bcdd] Plots v1.31.2
   [92933f4c] ProgressMeter v1.7.2
 ```
-5. Run a script
+5. Run a script for a Coulomb-type rheology with HLLC approximate Riemann solver, i.e., geoflow(). 
 ```julia
 julia> using saintVenant
-julia> geoflow(20.0,10.0,200)
+[ Info: Precompiling saintVenant [c37ef97f-960b-44b2-99db-35f1aa5b9bae]
+julia> geoflow(20.0,10.0,200,"coulomb","HLLC")
+```
+Then, the following lines should be seen on the REPL
+```julia
 [=> generating initial plots & exporting...
 ┌ Info: Figs saved in
 └   path_plot = "viz/out/"
