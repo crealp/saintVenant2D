@@ -184,7 +184,7 @@ end
             UFS[i,j,3,5] = 0.5*g*(U[i,j+1,1]^2-hR^2)
             UFS[i,j,3,6] = 0.5*g*(U[i  ,j,1]^2-hL^2)
         end
-        # Rusanov flux definition
+        # HLL flux definition
         if i<=nx && j<=ny+1
             hL = max(0.0,UFS[i,j,1,1])
             hR = max(0.0,UFS[i,j,1,2])
@@ -225,6 +225,13 @@ end
     end    
     return nothing
 end
+
+
+
+
+
+
+
 @views function fluxHLLC_D(UFS,U,z,g,nx,ny,dim) # see well-balanced scheme, e.g., http://www.lmm.jussieu.fr/~lagree/COURS/MFEnv/code_C_saintvenant.pdf
     # index initialization
     i = (blockIdx().x-1)*blockDim().x+threadIdx().x
@@ -268,8 +275,8 @@ end
                 sL = min(uL-cL,uS-cS)
                 sR = max(uR+cR,uS+cS)
             elseif hL==0.0 && hR>0.0 # dry-bed case on the left  
-                uR = UFS[i,j,2,2]/hR
                 uL = 0.0
+                uR = UFS[i,j,2,2]/hR
                 cR = sqrt(g*hR)
                 sL = uR-2.0*cR
                 sR = uR+1.0*cR
@@ -284,7 +291,7 @@ end
                 uR = 0.0
                 sL = 0.0
                 sR = 0.0
-            end   
+            end             
             sS = (sL*hR*(uR-sR)-sR*hL*(uL-sL))/(hR*(uR-sR)-hL*(uL-sL))
             vL = 0.0
             vR = 0.0
@@ -292,17 +299,8 @@ end
                 vL = UFS[i,j,3,1]/hL
             end
             if hR>0.0
-                vR = UFS[i,j,3,2]/hL
+                vR = UFS[i,j,3,2]/hR
             end
-            #= to be completed
-            #fstarL1 = 1.0*(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarL2 = 1.0*(sR*UFS[i,j,2,3]-sL*UFS[i,j,2,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarL3 = vL *(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(uR-uL))/(sR-sL)
-            
-            #fstarR1 = 1.0*(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarR2 = 1.0*(sR*UFS[i,j,2,3]-sL*UFS[i,j,2,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarR3 = vR *(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(uR-uL))/(sR-sL)
-            =#
             if sL>=0.0
                 UFS[i,j,1,7] = UFS[i,j,1,3]
                 UFS[i,j,2,7] = UFS[i,j,2,3]
@@ -319,8 +317,7 @@ end
                 UFS[i,j,1,7] = UFS[i,j,1,4]
                 UFS[i,j,2,7] = UFS[i,j,2,4]
                 UFS[i,j,3,7] = UFS[i,j,3,4]
-            end
-
+            end 
         end
     elseif dim == 2 # flux function vector G
         if i<=nx && j<=ny
@@ -345,8 +342,8 @@ end
             UFS[i,j,3,5] = 0.5*g*(U[i,j+1,1]^2-hR^2)
             UFS[i,j,3,6] = 0.5*g*(U[i  ,j,1]^2-hL^2)
         end
-        # HLLC flux definition
-        if i<=nx+1 && j<=ny
+        # HLLC flux definition, G vector
+        if i<=nx && j<=ny+1
             hL = max(0.0,UFS[i,j,1,1])
             hR = max(0.0,UFS[i,j,1,2])
             if hL>0.0 && hR>0.0
@@ -360,8 +357,8 @@ end
                 sL = min(uL-cL,uS-cS)
                 sR = max(uR+cR,uS+cS)
             elseif hL==0.0 && hR>0.0 # dry-bed case on the left  
-                uR = UFS[i,j,3,2]/hR
                 uL = 0.0
+                uR = UFS[i,j,3,2]/hR
                 cR = sqrt(g*hR)
                 sL = uR-2.0*cR
                 sR = uR+1.0*cR
@@ -376,7 +373,7 @@ end
                 uR = 0.0
                 sL = 0.0
                 sR = 0.0
-            end   
+            end             
             sS = (sL*hR*(uR-sR)-sR*hL*(uL-sL))/(hR*(uR-sR)-hL*(uL-sL))
             vL = 0.0
             vR = 0.0
@@ -384,16 +381,8 @@ end
                 vL = UFS[i,j,2,1]/hL
             end
             if hR>0.0
-                vR = UFS[i,j,2,2]/hL
+                vR = UFS[i,j,2,2]/hR
             end
-            #= to be completed
-            #fstarL1 = 1.0*(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarL2 = 1.0*(sR*UFS[i,j,2,3]-sL*UFS[i,j,2,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarL3 = vL *(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarR1 = 1.0*(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarR2 = 1.0*(sR*UFS[i,j,2,3]-sL*UFS[i,j,2,4]+sL*sR*(uR-uL))/(sR-sL)
-            #fstarR3 = vR *(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(uR-uL))/(sR-sL)
-            =#
             if sL>=0.0
                 UFS[i,j,1,7] = UFS[i,j,1,3]
                 UFS[i,j,2,7] = UFS[i,j,2,3]
@@ -405,13 +394,12 @@ end
             elseif sS<0.0<=sR
                 UFS[i,j,1,7] = 1.0*(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(UFS[i,j,1,2]-UFS[i,j,1,1]))/(sR-sL)
                 UFS[i,j,2,7] = vR *(sR*UFS[i,j,1,3]-sL*UFS[i,j,1,4]+sL*sR*(UFS[i,j,1,2]-UFS[i,j,1,1]))/(sR-sL)
-                UFS[i,j,3,7] = 1.0*(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(UFS[i,j,3,2]-UFS[i,j,3,1]))/(sR-sL)  
+                UFS[i,j,3,7] = 1.0*(sR*UFS[i,j,3,3]-sL*UFS[i,j,3,4]+sL*sR*(UFS[i,j,3,2]-UFS[i,j,3,1]))/(sR-sL)
             elseif sR<=0.0
                 UFS[i,j,1,7] = UFS[i,j,1,4]
                 UFS[i,j,2,7] = UFS[i,j,2,4]
                 UFS[i,j,3,7] = UFS[i,j,3,4]
-            end
-
+            end 
         end
     end    
     return nothing

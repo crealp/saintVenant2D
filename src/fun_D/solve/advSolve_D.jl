@@ -11,7 +11,7 @@
         elseif type=="HLL"
             @cuda blocks=cublocks threads=cuthreads fluxHLL_D(UFS,Ubc,zbc,g,nx,ny,1)
         elseif type=="HLLC"
-    
+            @cuda blocks=cublocks threads=cuthreads fluxHLLC_D(UFS,Ubc,zbc,g,nx,ny,1)
         else 
             @error "invalid flux definition, valid definitions are:\n\ta) Rus  - Rusanov fluxes\n\tb) HLL  - HLL approximate Riemann solver\n\tc) HLLC - HLLC  approximate Riemann solver"
             exit(-1)
@@ -30,7 +30,7 @@
     elseif type=="HLL"
         @cuda blocks=cublocks threads=cuthreads fluxHLL_D(UFS,Ubc,zbc,g,nx,ny,2)
     elseif type=="HLLC"
-
+        @cuda blocks=cublocks threads=cuthreads fluxHLLC_D(UFS,Ubc,zbc,g,nx,ny,2)
     else 
         @error "invalid flux definition, valid definitions are:\n\ta) Rus  - Rusanov fluxes\n\tb) HLL  - HLL approximate Riemann solver\n\tc) HLLC - HLLC  approximate Riemann solver"
         exit(-1)
