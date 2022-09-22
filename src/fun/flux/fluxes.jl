@@ -39,7 +39,7 @@
             HLLC!(f,UL,UR,FL,FR,g,nx,ny,"G")
         end    
     else 
-        @error "invalid flux definition, valid definitions are:\n\ta) Rus  - Rusanov fluxes\n\tb) HLL  - HLL approximate Riemann solver\n\tc) HLLC - HLLC  approximate Riemann solver"
+        @error "invalid numerical flux definition, valid ones are:\n\t a) Rus  - Rusanov fluxes\n\t b) HLL  - HLL approximate Riemann solver\n\t c) HLLC - HLLC  approximate Riemann solver"
         exit(-1)
     end
     F.=(f[2:nx+1,:,:].+sr[2:nx+1,:,:]).-(f[1:nx+0,:,:].+sl[1:nx+0,:,:])
