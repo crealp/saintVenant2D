@@ -1,9 +1,3 @@
-include("wellBal.jl")
-include("HLL.jl")
-include("HLLC.jl")
-include("Rus.jl")
-include("LxF.jl")
-# Numerical fluxes function
 @views function fluxes!(F,U,z,g,Δx,Δt,type,nx,ny,dim)
     # out 
     f  = zeros(Float64,nx+1,ny,3)
@@ -45,10 +39,7 @@ include("LxF.jl")
             HLLC!(f,UL,UR,FL,FR,g,nx,ny,"G")
         end    
     else 
-        println("no numerical fluxes defined !")
-        println("available flux functions are: a) Rus  - Rusanov fluxes")
-        println("                            : b) HLL  - HLL approximate Riemann solver")
-        println("                            : c) HLLC - HLLC  approximate Riemann solver")
+        @error "invalid numerical flux definition, valid ones are:\n\t a) Rus  - Rusanov fluxes\n\t b) HLL  - HLL approximate Riemann solver\n\t c) HLLC - HLLC  approximate Riemann solver"
         exit(-1)
     end
     F.=(f[2:nx+1,:,:].+sr[2:nx+1,:,:]).-(f[1:nx+0,:,:].+sl[1:nx+0,:,:])

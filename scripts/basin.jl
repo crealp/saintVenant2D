@@ -1,10 +1,4 @@
-# include dependencies & function call(s)
-include("../src/fun/usingPackages.jl")
-include("../src/fun/misc.jl")
-include("../src/fun/geometry.jl")
-include("../src/fun/solve/svSolver.jl")
-
-@views function main()
+@views function basin()
     Dsim   = param("HLLC",
                     false,
                     "perfect",
@@ -26,6 +20,3 @@ include("../src/fun/solve/svSolver.jl")
     tC = 1.0./25.0
     svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
-main()
-# https://techytok.com/lesson-parallel-computing
-# https://nbviewer.org/github/daniel-koehn/Differential-equations-earth-system/blob/master/10_Shallow_Water_Equation_2D/01_2D_Shallow_Water_Equations.ipynb

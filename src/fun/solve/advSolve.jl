@@ -1,7 +1,3 @@
-# include dependencies & function call(s)
-include("../bc/getBCs.jl")
-include("../flux/fluxes.jl")
-include("../upd/update.jl")
 @views function advSolve(h,Qx,Qy,z,U,F,G,g,Δx,Δy,Δt,nx,ny,type)
     # assembly of conservative variables vector and flux function vector
         getU!(U,h,Qx,Qy,nx,ny)

@@ -1,18 +1,10 @@
-# include dependencies & function call(s)
-include("../src/fun/usingPackages.jl")
-include("../src/fun/misc.jl")
-include("../src/fun/geometry.jl")
-include("../src/fun/solve/svSolver.jl")
-
-@views function main()
-    Dsim   = param("HLLC",false,"coulomb",false)
+@views function geoflow(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String,isGif::Bool)
+    # Dsim definition
+    Dsim   = param(solvType,isGif,rheoType,false)
     #Dsim   = param("HLLC",false,"newtonian",false)
     # physical constant
-    lx     = 20.0
-    ly     = 20.0
     g      = 9.81
     # number of points
-    nx     = 200
     ny     = Int64((ly/lx)*nx)
     Qx     = zeros(Float64,nx,ny)
     Qy     = zeros(Float64,nx,ny)
@@ -25,6 +17,19 @@ include("../src/fun/solve/svSolver.jl")
     tC     = 1.0/25.0
     svSolver(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
 end
-main()
-# https://techytok.com/lesson-parallel-computing
-# https://nbviewer.org/github/daniel-koehn/Differential-equations-earth-system/blob/master/10_Shallow_Water_Equation_2D/01_2D_Shallow_Water_Equations.ipynb
+@views function geoflow_D(lx::Float64,ly::Float64,nx::Int64,rheoType::String,solvType::String,isGif::Bool)
+    Dsim   = param(solvType,isGif,rheoType,false)
+    #Dsim   = param("HLLC",false,"newtonian",false)
+    # physical constant
+    g      = 9.81
+    # number of points
+    ny     = Int64((ly/lx)*nx)
+    Qx     = zeros(Float64,nx,ny)
+    Qy     = zeros(Float64,nx,ny)
+    h,z,xc,yc,Δx,Δy = incline(lx,ly,nx,ny)
+    # action
+    CFL    = 0.5
+    T      = 5.0
+    tC     = 1.0/25.0
+    svSolver_D(xc,yc,h,Qx,Qy,z,g,CFL,T,tC,Δx,Δy,nx,ny,Dsim)
+end

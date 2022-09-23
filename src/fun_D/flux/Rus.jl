@@ -1,39 +1,37 @@
 # Rusanov numerical fluxes
-@views function fluxRus(fRus,UL,UR,FL,FR,g,type)
-    hL    = max(0.0,UL[1])
-    if hL>0.0
-        if type == "F"
-            uL = UL[2]/hL
-        elseif type == "G"
-            uL = UL[3]/hL
-        end 
-    else
-        uL = 0.0
-    end
-    hR    = max(0.0,UR[1])
-    if hR>0.0
-        if type == "F"
-            uR = UR[2]/hR
-        elseif type == "G"
-            uR = UR[3]/hR
-        end 
-    else
-        uR = 0.0
-    end
-    cL    = sqrt(g*hL)
-    cR    = sqrt(g*hR)
-    λ     = max(abs(uL-sqrt(g*hL)),abs(uR+sqrt(g*hR)))
-    for dim ∈ 1:3
-        fRus[dim] = (0.5*(FL[dim]+FR[dim])-0.5*λ*(UR[dim]-UL[dim]))
-    end
-    return fRus 
-end
-@views function Rus!(F,UL,UR,FL,FR,g,nx,ny,type)
-    fRus = zeros(Float64,3)
-    for j ∈ 1:ny
-        for i ∈ 1:nx+1
-            F[i,j,:] .= fluxRus(fRus,UL[i,j,:],UR[i,j,:],FL[i,j,:],FR[i,j,:],g,type)
-        end
+@views function Rus_D(UFS,g,nx,ny,type)
+    # index initialization
+    i  = (blockIdx().x-1) * blockDim().x + threadIdx().x
+    j  = (blockIdx().y-1) * blockDim().y + threadIdx().y
+    if i<=nx+1 && j<=ny
+            hL    = max(0.0,UFS[i,j,1,1])
+            if hL>0.0
+                if type == 1#"F"
+                    uL = UFS[i,j,2,1]/hL
+                elseif type == 2#"G"
+                    uL = UFS[i,j,3,1]/hL
+                end 
+            else
+                uL = 0.0
+            end
+            hR    = max(0.0,UFS[i,j,1,2])
+            if hR>0.0
+                if type == 1#"F"
+                    uR = UFS[i,j,2,2]/hR
+                elseif type == 2#"G"
+                    uR = UFS[i,j,3,2]/hR
+                end 
+            else
+                uR = 0.0
+            end
+            cL    = sqrt(g*hL)
+            cR    = sqrt(g*hR)
+            λ     = max(abs(uL-sqrt(g*hL)),abs(uR+sqrt(g*hR)))
+            for dim ∈ 1:3
+                UFS[i,j,dim,7] = (0.5*(UFS[i,j,dim,3]+UFS[i,j,dim,4])-0.5*λ*(UFS[i,j,dim,2]-UFS[i,j,dim,1]))
+            end
     end
     return nothing
 end
+
+

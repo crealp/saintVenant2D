@@ -292,7 +292,7 @@ end
     xc0    = lx/2.5
     yc0    = 0.5*ly
     R      = lx/20
-    hbump  = 0.91
+    hbump  = 0.0*0.91
     H      = hbump/exp(-1.0/R^2)
     for i ∈ 1:nx
         for j ∈ 1:ny
