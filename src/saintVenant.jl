@@ -3,7 +3,21 @@ export geoflow,runoff,coast,basin # host code
 export geoflow_D,runoff_D # device code
 # include dependencies & function call(s)
     include(joinpath("./fun"  , "superInclude.jl"  )) # standard dependencies
-    include(joinpath("./fun_D", "superInclude_D.jl")) # additional dependencies for Device & GPU computing
+    try
+        include(joinpath("./fun_D", "superInclude_D.jl")) # additional dependencies for Device & GPU computing
+        t = ["(✓) geoflow()\n\t    geoflow_D()\n\t",
+             "(✓) runoff() \n\t    runoff_D() \n\t", 
+             "(✓) coast()  \n\t",
+             "(✓) basin()"]   
+        @info t[1]*t[2]*t[3]*t[4]
+    catch
+        @warn "CUDA.jl dependencies not found: [.]_D functions might not be working on device"
+        t = ["(✓) geoflow()\n\t(✗) geoflow_D()\n\t",
+             "(✓) runoff() \n\t(✗) runoff_D() \n\t", 
+             "(✓) coast()  \n\t",
+             "(✓) basin()"]    
+        @info t[1]*t[2]*t[3]*t[4]
+    end
 # initialize & generate outputs and data folders
     global path_plot = "viz/out/"
     if isdir(path_plot)==false
@@ -40,12 +54,8 @@ export geoflow_D,runoff_D # device code
 # include coast routine in saintVenant module
     include(joinpath("../scripts", "coast.jl"))
 # include basin routine in saintVenant module
-    include(joinpath("../scripts", "basin.jl"))
-    t = ["(✓) geoflow()\n\t    geoflow_D()\n\t",
-         "(✓) runoff() \n\t    runoff_D() \n\t", 
-         "(✓) coast()  \n\t",
-         "(✓) basin()"]       
-    @info t[1]*t[2]*t[3]*t[4]
+    include(joinpath("../scripts", "basin.jl"))   
+
 end
 
 #=
